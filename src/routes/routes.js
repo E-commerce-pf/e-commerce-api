@@ -21,11 +21,11 @@ router.use((req, res, next) => {
 
 
 //IMPORTAMOS TODAS LAS RUTAS
-const test = require('./test');
-
+const user = require('./User');
 
 //DEFINIMOS LOS CASOS DE USO DE LAS RUTAS
-router.use('/test', test);
+router.use('/user', user);
+
 
 
 
