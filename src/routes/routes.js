@@ -19,9 +19,12 @@ router.use((req, res, next) => {
       next();
 });
 
-//Enlaze de las rutas
+//IMPORTAMOS TODAS LAS RUTAS
+const user = require('./User');
 const registerRoute = require('./Register');
 
+//DEFINIMOS LOS CASOS DE USO DE LAS RUTAS
+router.use('/user', user);
 router.use('/register', registerRoute);
 
 
