@@ -4,13 +4,13 @@ const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
-/* const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/aim-edge`,
+const sequelize = new Sequelize(
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/ecommerce`,
   {
     logging: false,
     native: false,
   }
-); */
+); 
 
 const basename = path.basename(__filename);
 
@@ -34,9 +34,8 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { User, Category } = sequelize.models;
+console.log(sequelize.models);
 
 module.exports = {
-  ...sequelize.models,
   conn: sequelize,
 };
