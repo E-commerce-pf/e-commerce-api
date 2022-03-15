@@ -15,7 +15,7 @@ const Product = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    imageURL: {
+    image: {
       type: DataTypes.STRING,
     },
     price: {
@@ -30,7 +30,7 @@ const Product = (sequelize) => {
         isNumeric: true,
       },
     },
-    ventas: {
+    sales: {
       type: DataTypes.INTEGER,
       validate: {
         isNumeric: true,
