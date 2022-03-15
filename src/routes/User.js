@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const {decrypt} = require('../controllers/encrypt');
 const sequelise = require('../db');
 const { User } = sequelise.models;
+const { verifyUserToken } = require('../controllers/verifyToken');
 
 router.get('/login', async(req,res) => {
       //Solamente se puede registrar con el email 
@@ -57,6 +58,10 @@ router.get('/login', async(req,res) => {
       } catch (error) {
             return res.status(400).json(error)
       }
+})
+
+router.get('/test', verifyUserToken, (req, res)=>{
+      return res.send('Adelante, pase');
 })
 
 module.exports = router;
