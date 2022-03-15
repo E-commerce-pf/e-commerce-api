@@ -21,8 +21,10 @@ router.use((req, res, next) => {
 
 //Enlaze de las rutas
 const registerRoute = require('./Register');
+const reviewRoute= require('./Review')
 
 router.use('/register', registerRoute);
+router.use('/review', reviewRoute);
 
 
 
