@@ -5,8 +5,8 @@ const { encrypt } = require("../controllers/encrypt");
 
 router.post("/", async (req, res) => {
     //Encriptación de la contraseña
-    let {email,username,password} = req.body;
-    if( !email || !username ||!password ) return res.status(400).json({ error: "Some fields where empty" });
+    let {email,lastName,name,password,Phone} = req.body;
+    if( !email || !lastName ||!name ||!Phone ||!password ) return res.status(400).json({ error: "Some fields where empty" });
     req.body.password = encrypt(req.body.password);
   
     //Comprobación que no exista un email igual en la base de datos
