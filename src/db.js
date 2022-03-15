@@ -36,6 +36,4 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 console.log(sequelize.models);
 
-module.exports = {
-  conn: sequelize,
-};
+module.exports = sequelize
