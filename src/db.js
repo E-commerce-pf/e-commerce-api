@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
     logging: false,
     native: false,
   }
-); 
+);
 
 const basename = path.basename(__filename);
 
@@ -33,7 +33,25 @@ let capsEntries = entries.map((entry) => [
   entry[1],
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
-
 console.log(sequelize.models);
 
-module.exports = sequelize
+const { Product, Category, Review, User } = sequelize.models;
+
+//Relaciones
+Product.belongsToMany(Category, {
+  through: "ProductCategories",
+  timestamps: false,
+});
+Product.belongsTo(User);
+Product.hasMany(Review);
+
+Category.belongsToMany(Product, {
+  through: "ProductCategories",
+  timestamps: false,
+});
+
+User.hasMany(Product);
+
+Review.belongsTo(Product);
+
+module.exports = sequelize;
