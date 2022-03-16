@@ -7,7 +7,7 @@ app.use("/api", router);
 const sequelize = require("./src/db");
 
 
-sequelize.sync({force: false}).then(()=>{
+sequelize.sync({force: true}).then(()=>{
       app.listen(3001, () => {
             console.log("Listening on port 3001");
       });
