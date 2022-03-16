@@ -18,7 +18,7 @@ const verifyAdminToken = (req, res, next) =>{
             if(decoded.role === 'Admin'){
                   next();
             } else {
-                  return res.status(400).json({error: 'You do not have these permissions '})
+                  return res.status(401).json({error: 'You do not have these permissions '})
             }
       } else{
             return res.status(400).json({error: 'Token not provided'});
