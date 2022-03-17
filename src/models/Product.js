@@ -33,12 +33,14 @@ const Product = (sequelize) => {
     },
     sales: {
       type: DataTypes.INTEGER,
+      defaultValue: 0,
       validate: {
         isNumeric: true,
       },
     },
     discount: {
       type: DataTypes.FLOAT,
+      defaultValue: 0,
       validate: {
         isNumeric: true,
         min: 0,
