@@ -4,8 +4,8 @@ const User = sequelize.models.User;
 const { encrypt } = require("../controllers/encrypt");
 
 router.post("/", async (req, res) => {
-    const {email, lastName, name, password} = req.body;
-    if( !email || !lastName ||!name ||!password ) return res.status(400).json({ error: "Some fields where empty" });
+    const {email, lastName, name, password, country} = req.body;
+    if( !email || !lastName ||!name ||!password || !country) return res.status(400).json({ error: "Some fields where empty" });
 
     //Encriptación de la contraseña
     req.body.password = encrypt(req.body.password);

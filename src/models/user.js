@@ -27,10 +27,6 @@ module.exports = (sequelize) => {
       type : DataTypes.BOOLEAN,
       defaultValue: false
     },
-    genre:{
-      type : DataTypes.STRING
-      //  Aqui deberia tener las opciones [hombre, mujer, otro, prefiero no decirlo]
-    },
     country: {
       type: DataTypes.STRING,
       allowNull: true
