@@ -48,7 +48,7 @@ Category.belongsToMany(Product, {
   timestamps: false,
 });
 
-User.hasMany(Product);
+// User.hasMany(Product);
 
 Review.belongsTo(Product);
 
