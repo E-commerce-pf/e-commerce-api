@@ -46,7 +46,7 @@ const createProduct = async (req, res) => {
 const getAllProducts = async () => {
   try {
     return await Product.findAll({
-      include: [Category, Review],
+      include: [{ model: Category, attributes: ["name"] }, Review],
     });
   } catch (error) {
     return error.message;

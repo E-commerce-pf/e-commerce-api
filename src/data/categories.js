@@ -6,6 +6,7 @@ const categories = [
   { name: "audio" },
   { name: "consoles" },
   { name: "televisions" },
+  { name: "other" },
 ];
 
 module.exports = categories;

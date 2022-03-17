@@ -8,6 +8,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["computing"],
   },
   {
     title: "Mens Casual Premium Slim Fit T-Shirts ",
@@ -19,6 +20,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["other"],
   },
   {
     title: "Mens Cotton Jacket",
@@ -29,6 +31,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["other"],
   },
   {
     title: "Mens Casual Slim Fit",
@@ -39,6 +42,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["other"],
   },
   {
     title:
@@ -50,6 +54,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["other"],
   },
   {
     title: "Solid Gold Petite Micropave ",
@@ -60,6 +65,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["other"],
   },
   {
     title: "White Gold Plated Princess",
@@ -70,6 +76,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["other"],
   },
   {
     title: "Pierced Owl Rose Gold Plated Stainless Steel Double",
@@ -80,6 +87,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["other"],
   },
   {
     title: "WD 2TB Elements Portable External Hard Drive - USB 3.0 ",
@@ -90,6 +98,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["computing"],
   },
   {
     title: "SanDisk SSD PLUS 1TB Internal SSD - SATA III 6 Gb/s",
@@ -100,6 +109,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["computing"],
   },
   {
     title:
@@ -111,6 +121,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["computing"],
   },
   {
     title:
@@ -122,6 +133,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["computing"],
   },
   {
     title: "Acer SB220Q bi 21.5 inches Full HD (1920 x 1080) IPS Ultra-Thin",
@@ -132,6 +144,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["computing"],
   },
   {
     title:
@@ -143,6 +156,7 @@ const products = [
     stock: 15,
     sales: 1,
     discount: 0,
+    categories: ["computing"],
   },
   {
     title: "BIYLACLESEN Women's 3-in-1 Snowboard Jacket Winter Coats",
@@ -153,6 +167,7 @@ const products = [
     stock: 1,
     sales: 9,
     discount: 0.4,
+    categories: ["other"],
   },
   {
     title:
@@ -164,6 +179,7 @@ const products = [
     stock: 10,
     sales: 0,
     discount: 0,
+    categories: ["other"],
   },
   {
     title: "Rain Jacket Women Windbreaker Striped Climbing Raincoats",
@@ -174,6 +190,7 @@ const products = [
     stock: 5,
     sales: 5,
     discount: 0.3,
+    categories: ["other"],
   },
   {
     title: "MBJ Women's Solid Short Sleeve Boat Neck V ",
@@ -184,6 +201,7 @@ const products = [
     stock: 0,
     sales: 10,
     discount: 0.5,
+    categories: ["other"],
   },
   {
     title: "Opna Women's Short Sleeve Moisture",
@@ -194,6 +212,7 @@ const products = [
     stock: 9,
     sales: 1,
     discount: 0.25,
+    categories: ["other"],
   },
   {
     title: "DANVOUY Womens T Shirt Casual Cotton Short",
@@ -204,6 +223,7 @@ const products = [
     stock: 20,
     sales: 0,
     discount: 0.1,
+    categories: ["other"],
   },
 ];
 

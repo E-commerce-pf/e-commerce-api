@@ -15,6 +15,29 @@ sequelize.sync({ force: true }).then(() => {
 
     await Category.bulkCreate(categories);
     await Product.bulkCreate(products);
+    let prueba = [];
+    for (let i = 0; i < products.length; i++) {
+      const findCategory = await Category.findAll({
+        where: {
+          name: products[i].categories,
+        },
+      });
+      // console.log(findCategory[i].dataValues.name);
+      const [newProduct] = await Product.findOrCreate({
+        where: {
+          title: products[i].title,
+          price: products[i].price,
+          image: products[i].image,
+          description: products[i].description,
+          stock: products[i].stock,
+          sales: products[i].sales,
+          discount: products[i].discount,
+        },
+      });
+
+      await newProduct.setCategories(findCategory);
+    }
+
     console.log("Products and categories pre charged :)");
   });
 });
