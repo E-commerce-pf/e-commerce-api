@@ -1,8 +1,9 @@
 const router = require("express").Router();
+<<<<<<< HEAD
 const {
   createProduct,
-  getAllProducts,
-  getProductById,
+  getProducts,
+  
 } = require("../controllers/product");
 const { verifyUserToken } = require("../controllers/verifyToken");
 
@@ -19,14 +20,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  try {
+router.get("/find/:id", async (req, res) => {
+ 
     const { id } = req.params;
-    const product = await getProductById(id);
-    return res.json(product);
-  } catch (error) {
-    return res.status(401).json({ message: "There are not products" });
-  }
+    const products = await getProducts(id);
+    return res.json(products);
+  
 });
 
 module.exports = router;

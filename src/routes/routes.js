@@ -23,14 +23,14 @@ router.use((req, res, next) => {
 const user = require("./User");
 const registerRoute = require("./Register");
 const reviewRoute = require("./Review");
-const product = require("./Product");
-const category = require("./Category");
+const productRoute = require("./Product");
+const cartRoute = require("./Cart");
 
 //DEFINIMOS LOS CASOS DE USO DE LAS RUTAS
 router.use("/user", user);
 router.use("/register", registerRoute);
 router.use("/review", reviewRoute);
-router.use("/product", product);
-router.use("/category", category);
+router.use("/product", productRoute);
+router.use("/cart", cartRoute);
 
 module.exports = router;

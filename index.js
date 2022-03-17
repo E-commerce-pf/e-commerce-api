@@ -15,14 +15,13 @@ sequelize.sync({ force: true }).then(() => {
 
     await Category.bulkCreate(categories);
     await Product.bulkCreate(products);
-    let prueba = [];
     for (let i = 0; i < products.length; i++) {
       const findCategory = await Category.findAll({
         where: {
           name: products[i].categories,
         },
       });
-      // console.log(findCategory[i].dataValues.name);
+
       const [newProduct] = await Product.findOrCreate({
         where: {
           title: products[i].title,
@@ -41,5 +40,3 @@ sequelize.sync({ force: true }).then(() => {
     console.log("Products and categories pre charged :)");
   });
 });
-/* conn.sync({ force: true }).then(() => {
-}); */

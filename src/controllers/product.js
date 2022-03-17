@@ -43,38 +43,32 @@ const createProduct = async (req, res) => {
   }
 };
 
-const getAllProducts = async () => {
+const getProducts = async (id) => {
   try {
-    return await Product.findAll({
-      include: [{ model: Category, attributes: ["name"] }, Review],
-    });
-  } catch (error) {
-    return error.message;
-  }
-};
-
-const getProductById = async (id) => {
-  try {
+    if (id === "All") {
+      const products = Product.findAll();
+      let totalProducts = Object.keys(products).length;
+      if (totalProducts) return res.json({ totalProducts, ...products });
+      else throw new Error("No products have been added yet!");
+    }
     if (
       !/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(
         id
       )
     )
-      return res.status(400).send({ error: "Invalid ID format" });
+      return res.status(400).json({ errormsg: "Invalid ID format" });
 
-    const product = await Product.findOne({
-      where: {
-        id,
-      },
-    });
-    return res.status(200).json(product);
+    const product = await Product.findByPk(id);
+
+    if (!product)
+      return res.status(404).json({ errormsg: "Product not found" });
+    else return res.status(200).json(product);
   } catch (error) {
-    return res.status(404).json({ error: "Product not found" });
+    return res.status(500).json({ error: error.message });
   }
 };
 
 module.exports = {
   createProduct,
-  getAllProducts,
-  getProductById,
+  getProducts,
 };

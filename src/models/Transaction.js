@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
                   defaultValue: false
             },
             state:{
-                  type: DataTypes.STRING,
+                  type: DataTypes.ENUM('process', 'complete', 'canceled'),
                   allowNull : false
             }
       });
