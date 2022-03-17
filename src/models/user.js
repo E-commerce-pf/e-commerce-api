@@ -28,12 +28,20 @@ module.exports = (sequelize) => {
       defaultValue: false
     },
     genre:{
-      type : DataTypes.STRING
-      //  Aqui deberia tener las opciones [hombre, mujer, otro, prefiero no decirlo]
+      type: DataTypes.ENUM('Hombre', 'Mujer', 'Otro', 'Prefiero no decirlo')
     },
     country: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    postedProducts: {
+      type: DataTypes.ARRAY(DataTypes.STRING) // Acá se guardan los id de los productos posteados por el usuario
+    },
+    cart:{
+      type: DataTypes.ARRAY(DataTypes.JSON)
+    },
+    history:{
+      type: DataTypes.ARRAY(DataTypes.STRING)
     }
   });
 };
