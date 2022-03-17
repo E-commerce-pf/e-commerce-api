@@ -1,18 +1,18 @@
 const router = require("express").Router();
 const sequelize = require('../db');
 const { User,Product} = sequelize.models;
-const getProductOwner= async (product)=>
+const createTransaction= async (product,isSell)=>
 {    
     try {
-        return await User.findOne({
-            where: {
-                id: product.Users
-            }
+        return await Transaction.create({
+            product,
+            isSell:false,
+            state: "process",
         });
     } catch (error) {
         return error.message
     }
 }
 module.exports = {
-    getProductOwner,
+    createTransaction,
   };

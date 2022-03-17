@@ -1,18 +1,17 @@
-const router = require("express").Router();
 const sequelize = require('../db');
-const { User,Product} = sequelize.models;
-const getProductOwner= async (product)=>
+const { User} = sequelize.models;
+const getUser= async (userId)=>
 {    
     try {
         return await User.findOne({
             where: {
-                id: product.Users
+                id: userId
             }
-        });
+        })
     } catch (error) {
         return error.message
     }
 }
 module.exports = {
-    getProductOwner,
+    getUser,
   };
