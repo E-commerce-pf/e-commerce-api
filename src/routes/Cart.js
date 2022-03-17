@@ -8,8 +8,8 @@ const { verifyUserToken } = require('../controllers/verifyToken');
 let statusCode=500
 
 // Agregar o borrar del carrito
-router.post('/:userId/:productId/:method/:amount', async (req, res)=>{
-    let {userId, productId, method, amount} = req.params
+router.post('/cart', async (req, res)=>{
+    let {userId, productId, method, amount} = req.body
 
     let uuid = /[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/
 
