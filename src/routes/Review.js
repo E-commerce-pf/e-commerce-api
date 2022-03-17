@@ -1,14 +1,22 @@
 const router = require('express').Router();
 const sequelize = require('../db');
-const { User, Review, Product, Transaction } = sequelize.models;
-
+const { User, Product, Transaction } = sequelize.models;
+const {
+  createReview,
+} = require("../controllers/review");
 
 router.post('/',async (req, res) => {
 
   const { userId, comment, score, productId} = req.body;
 
-  const sender = await User.findByPk(userId).catch(() => false);
-
+  const sender = await User.findOne({
+    where:{
+      id: userId
+    },
+    include: Transaction
+  }).then(r=>r.dataValues).catch(() => false);
+  if(!sender.Transactions.find(t=>t.product.id===productId))
+  return res.status(400).send({ error: 'User not buy this product.' });
   if (!sender) {
     return res.status(400).send({ error: 'Missing or invalid sender ID.' });
   }
@@ -26,11 +34,7 @@ router.post('/',async (req, res) => {
   if (!product) {
     return res.status(404).send({ error: 'Product does not exist.' });
   }
-  const newReview = await Review.create({
-    userId,
-    score,
-    comment
-  });
+  const newReview = await createReview(userId,score,comment);
 
   const review = await product.addReview(newReview).catch(e => { console.log(e); return false; });
 
