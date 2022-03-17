@@ -6,7 +6,7 @@ const sequelize = require("./src/db");
 
 sequelize.sync({ force: true }).then(() => {
   server.listen(PORT, () => {
-    console.log("Listening on port 3001");
+    console.log(`Listening on port ${PORT}`);
   });
 });
 /* conn.sync({ force: true }).then(() => {

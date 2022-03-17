@@ -2,18 +2,24 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
+const { DATABASE_URL } = process.env;
 
-const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/ecommerce`,
-  {
-    logging: false,
-    native: false,
-  }
-); 
+const sequelize = new Sequelize(DATABASE_URL, {
+  logging: false,
+  native: false,
+  // Config para Heroku
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
+});
 
 const basename = path.basename(__filename);
+
 const modelDefiners = [];
+
 fs.readdirSync(path.join(__dirname, "/models"))
   .filter(
     (file) =>
@@ -25,8 +31,4 @@ fs.readdirSync(path.join(__dirname, "/models"))
 
 modelDefiners.forEach((model) => model(sequelize));
 
-
-
-
-console.log(sequelize.models);
-module.exports = sequelize
+module.exports = sequelize;
