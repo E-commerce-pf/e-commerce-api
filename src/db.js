@@ -31,4 +31,31 @@ fs.readdirSync(path.join(__dirname, "/models"))
 
 modelDefiners.forEach((model) => model(sequelize));
 
+let entries = Object.entries(sequelize.models);
+let capsEntries = entries.map((entry) => [
+  entry[0][0].toUpperCase() + entry[0].slice(1),
+  entry[1],
+]);
+sequelize.models = Object.fromEntries(capsEntries);
+console.log(sequelize.models);
+
+const { Product, Category, Review, User } = sequelize.models;
+
+//Relaciones
+Product.belongsToMany(Category, {
+  through: "ProductCategories",
+  timestamps: false,
+});
+
+Product.hasMany(Review);
+
+Category.belongsToMany(Product, {
+  through: "ProductCategories",
+  timestamps: false,
+});
+
+// User.hasMany(Product);
+
+Review.belongsTo(Product);
+
 module.exports = sequelize;
