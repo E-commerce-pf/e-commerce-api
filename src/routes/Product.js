@@ -7,16 +7,15 @@ const { Product, Category, Review } = sequelize.models;
 router.post("/", verifyUserToken, createProduct);
 
 let statusCode = 500;
-router.get("/find/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   let { id } = req.params;
 
   try {
-    if (id === "all") {
+    if (!id) {
       const products = await Product.findAll({
         include: [{ model: Category, attributes: ["name"], Review }],
       });
-      let totalProducts = Object.keys(products).length;
-      if (totalProducts) return res.json({ totalProducts, ...products });
+      if (totalProducts) return res.json(products);
       else throw new Error("No products have been added yet!");
     }
     statusCode = 400;
