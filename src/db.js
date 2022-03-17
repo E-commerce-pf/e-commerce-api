@@ -40,7 +40,7 @@ Product.belongsToMany(Category, {
   through: "ProductCategories",
   timestamps: false,
 });
-Product.belongsTo(User);
+
 Product.hasMany(Review);
 
 Category.belongsToMany(Product, {

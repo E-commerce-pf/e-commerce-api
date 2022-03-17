@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const router = require("./src/routes/routes");
 const categories = require("./src/data/categories");
+const products = require("./src/data/products");
 const sequelise = require("./src/db");
 const { Product, Category, Review, User } = sequelise.models;
 
@@ -13,7 +14,8 @@ sequelize.sync({ force: true }).then(() => {
     console.log("Listening on port 3001");
 
     await Category.bulkCreate(categories);
-    console.log("Categories pre charged :)");
+    await Product.bulkCreate(products);
+    console.log("Products and categories pre charged :)");
   });
 });
 /* conn.sync({ force: true }).then(() => {

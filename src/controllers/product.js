@@ -1,9 +1,8 @@
 const sequelize = require("../db");
-const { Product, Category, Review, User } = sequelize.models;
+const { Product, Category, Review } = sequelize.models;
 
 const createProduct = async (req, res) => {
   const {
-    userId,
     title,
     description,
     image,
@@ -23,17 +22,6 @@ const createProduct = async (req, res) => {
         .status(400)
         .json({ errorMessage: "One provided category is not validate" });
 
-    const owner = await User.findByPk(userId);
-    if (!owner)
-      return res
-        .status(400)
-        .json({ errorMessage: "User not found. Check the userId" });
-
-    //Remuevo datos que no le interesan al front
-    delete owner.dataValues.password;
-    delete owner.dataValues.createdAt;
-    delete owner.dataValues.updatedAt;
-
     let newProduct = await Product.create({
       title,
       description,
@@ -47,7 +35,7 @@ const createProduct = async (req, res) => {
     await newProduct.addCategory(categoriesDB);
 
     const newCategory = categoriesDB.map((category) => category.name);
-    newProduct = { ...newProduct.dataValues, owner, categories: newCategory };
+    newProduct = { ...newProduct.dataValues, categories: newCategory };
 
     return res.json(newProduct);
   } catch (error) {
