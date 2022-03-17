@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const sequelize = require('../db');
 const { User,Product} = sequelize.models;
-const createTransaction= async (product,isSell)=>
+const createTransaction= async (product,isSold)=>
 {    
     try {
         return await Transaction.create({

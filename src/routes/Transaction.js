@@ -1,8 +1,9 @@
 const sequelize = require('../db');
+const router = require('express').Router();
 const { User,Product} = sequelize.models;
 const {
     getProductOwner,
-  } = require("../controllers/product");
+  } = require("../controllers/products");
 const {
     getUser,
   } = require("../controllers/user");
@@ -16,7 +17,7 @@ router.post("/:productId/:userId", async (req, res) => {
     //let product=await Product.findByPk(productId);
     let product=await Product.findOne({
         include: User
-    }).dataValues;
+    });
 
     if (!product) return res.status(400).json({ error: 'Product not found.' });
     //Buscamos al dueño del producto
@@ -39,3 +40,4 @@ router.post("/:productId/:userId", async (req, res) => {
         return res.status(500).json(error);
     }
 });
+module.exports = router;
