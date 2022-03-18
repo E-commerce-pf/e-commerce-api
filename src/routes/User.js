@@ -36,9 +36,8 @@ router.post('/login', async(req,res) => {
                         return res.status(400).json({error: error})
                   }
             }
+            return res.status(400).json({error: 'User not found'});
       }
-      
-      return res.status(400).json({error: 'User not found'});
 
       result = result.dataValues;
       try {
