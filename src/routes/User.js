@@ -8,6 +8,7 @@ const { verifyUserToken } = require('../controllers/verifyToken');
 router.post('/login', async(req,res) => {
       let result;
       let {email, password, loginWithSocial} = req.body;
+      console.log(req.body)
       //Verificamos que nos hayan proporcionado los datos necesarios
       if(!loginWithSocial){
             if(!email || !password) return res.status(400).json({error: 'The necessary data to enter was not sent'});
@@ -31,12 +32,13 @@ router.post('/login', async(req,res) => {
             if(loginWithSocial){
                   try {
                         await User.create(req.body)
-                        return res.status(201).json({succes: 'User created in LogIn'})
+                        return res.status(201).json({success: 'User created in LogIn'})
                   } catch (error) {
                         return res.status(400).json({error: error})
                   }
             }
-            return res.status(400).json({error: 'User not found'});
+      } else if (result && loginWithSocial){
+            return res.status(400).json({error: 'User already exist' })
       }
 
       result = result.dataValues;
@@ -70,7 +72,7 @@ router.post('/login', async(req,res) => {
             }
 
       } catch (error) {
-            return res.status(400).json(error)
+            return res.status(400).json({error : error.message})
       }
 })
 

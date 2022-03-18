@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
 
     //Comprobación que no exista un email igual en la base de datos
     statusCode=400
-    if(result) throw new Error('This email has already been used')
+    if(result) return res.status(400).json({error: 'This email has already been used'})
 
     else{
       try {
