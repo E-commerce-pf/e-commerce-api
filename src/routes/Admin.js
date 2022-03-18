@@ -148,22 +148,46 @@ router.delete('/user/delete/:id', verifyAdminToken, async (req, res)=>{
     }
 })
 
-router.put('/categories/create/', verifyAdminToken, async (req, res)=>{
+router.post('/categories/create', verifyAdminToken, async (req, res)=>{
     let {categories} = req.body
 
     try{
+        statusCode = 400
+        if(!categories) return new Error('No categories were sent')
         let existingCategories = await Category.findAll();
 
-        if(categories.every(cat=>existingCategories.includes(cat))) return res.status(200).json({status:'None of the sent categories were new'})
+        let newCategories = categories.filter(cat=>!existingCategories.includes(cat))
 
-        const user = await User.findByPk(id)
+        if(!newCategories) return res.status(200).json({status:'None of the sent categories were new'})
 
-        statusCode = 404
-        if(!user) throw new Error("No user found with given ID")
-        else {
-            user.destroy()
-            return res.status(200).json({status:`User ${user.name+' '+user.lastName} deleted`})
-        }
+        let success = await Promise.all(newCategories.map(async cat=>await Category.create({name:cat})))
+
+        statusCode = 500
+        if(success) res.status(201).json({status:'Categories created:', newCategories})
+        else throw new Error("Unexpected error occurred")
+    }
+    catch(err){
+        return res.status(statusCode).json({error: err.message})
+    }
+})
+
+router.delete('/categories/delete', verifyAdminToken, async (req, res)=>{
+    let {categories} = req.body
+
+    try{
+        statusCode = 400
+        if(!categories) return new Error('No categories were sent')
+        let existingCategories = await Category.findAll();
+
+        let selectedCategories = categories.filter(cat=>existingCategories.includes(cat))
+
+        if(!selectedCategories) return res.status(200).json({status:'None of the sent categories existed'})
+
+        let success = await Promise.all(selectedCategories.map(async cat=>await Category.destroy({where:{name:cat}})))
+
+        statusCode = 500
+        if(success) res.status(201).json({status:'Categories deleted:', selectedCategories})
+        else throw new Error("Unexpected error occurred")
     }
     catch(err){
         return res.status(statusCode).json({error: err.message})
