@@ -1,18 +1,18 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const {decrypt} = require('../controllers/encrypt');
+const {decrypt, encrypt} = require('../controllers/encrypt');
 const sequelize = require('../db');
 const { User, Product } = sequelize.models;
 const { verifyUserToken } = require('../controllers/verifyToken');
 
-let statusCode=500
-
-router.get('/login', async(req,res) => {
-      let {email, password} = req.body
-      //Solamente se puede registrar con el email 
+router.post('/login', async(req,res) => {
       let result;
+      let {email, password, loginWithSocial} = req.body;
+      console.log(req.body)
       //Verificamos que nos hayan proporcionado los datos necesarios
-      if(!email || !password) return res.status(400).json({error: 'The necessary data to enter was not sent'});
+      if(!loginWithSocial){
+            if(!email || !password) return res.status(400).json({error: 'The necessary data to enter was not sent'});
+      }
 
       try {
             //Buscamos el usuario en la base de datos
@@ -21,10 +21,23 @@ router.get('/login', async(req,res) => {
                         email
                   }
             });
-            if(!result) throw new Error('User not found')
       } catch (error) {
             //En el caso de que no haya encontrado el usuario 
             return res.status(400).json({error: error.message});
+      }
+
+      //En el caso de que no haya encontrado el usuario 
+      if(!result){
+            //Y está iniciando sesion con alguna red social
+            if(loginWithSocial){
+                  try {
+                        req.body.password = encrypt(req.body.password)
+                        await User.create(req.body)
+                        return res.status(201).json({success: 'New user created'})
+                  } catch (error) {
+                        return res.status(400).json({error: error})
+                  }
+            }
       }
 
       result = result.dataValues;
@@ -58,7 +71,7 @@ router.get('/login', async(req,res) => {
             }
 
       } catch (error) {
-            return res.status(400).json(error)
+            return res.status(400).json({error : error.message})
       }
 })
 

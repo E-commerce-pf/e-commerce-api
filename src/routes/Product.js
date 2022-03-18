@@ -1,32 +1,46 @@
 const router = require("express").Router();
+const { createProduct, getAllProducts } = require("../controllers/product");
+const { verifyUserToken } = require("../controllers/verifyToken");
 const sequelize = require("../db");
-const jwt = require('jsonwebtoken');
-const {decrypt} = require('../controllers/encrypt');
-const { Product } = sequelize.models;
-const { verifyUserToken } = require('../controllers/verifyToken');
+const { Product, Category, Review } = sequelize.models;
 
-let statusCode=500
+router.post("/", verifyUserToken, createProduct);
 
-router.get('/find/:id', async (req, res)=>{
-    let {id} = req.params
-    
-    try{
-        if(id==='all'){
-            const products = Product.findAll()
-            let totalProducts = Object.keys(products).length
-            if(totalProducts) return res.status(200).json({totalProducts, products:[...products]})
-            else throw new Error('No products have been added yet!')
-        }
-        statusCode=400
-        if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(id)) throw new Error('Invalid ID format')
+router.get("/", async (req, res) => {
+  try {
+    const products = await getAllProducts();
+    return res.json(products);
+  } catch (error) {
+    return res.status(404).json({ error: error.message });
+  }
+});
 
-        const product = await Product.findByPk(id)
+let statusCode = 500;
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
 
-        statusCode=404
-        if(!product) throw new Error('Product not found')
-        else return res.status(200).json(product) 
-    }
-    catch(err){ return res.status(statusCode).json({error: err.message}) }
-})
+  try {
+    statusCode = 400;
+    if (
+      !/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(
+        id
+      )
+    )
+      throw new Error("Invalid ID format");
+
+    const product = await Product.findOne({
+      where: {
+        id,
+      },
+      include: [{ model: Category, attributes: ["name"], Review }],
+    });
+
+    statusCode = 404;
+    if (!product) throw new Error("Product not found");
+    else return res.json(product);
+  } catch (err) {
+    return res.status(statusCode).json({ error: err.message });
+  }
+});
 
 module.exports = router;

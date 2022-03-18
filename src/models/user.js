@@ -11,9 +11,14 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    loginWithSocial:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: true
+    },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -21,27 +26,29 @@ module.exports = (sequelize) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     isAdmin:{
       type : DataTypes.BOOLEAN,
       defaultValue: false
-    },
-    genre:{
-      type: DataTypes.ENUM('Hombre', 'Mujer', 'Otro', 'Prefiero no decirlo')
     },
     country: {
       type: DataTypes.STRING,
       allowNull: true
     },
     postedProducts: {
-      type: DataTypes.ARRAY(DataTypes.STRING) // Acá se guardan los id de los productos posteados por el usuario
+      type: DataTypes.ARRAY(DataTypes.STRING), // Acá se guardan los id de los productos posteados por el usuario
+      allowNull: true
     },
     cart:{
-      type: DataTypes.ARRAY(DataTypes.JSON)
+      type: DataTypes.ARRAY(DataTypes.JSON),
+      allowNull: true
+
     },
     history:{
-      type: DataTypes.ARRAY(DataTypes.STRING)
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true
+
     }
   });
 };

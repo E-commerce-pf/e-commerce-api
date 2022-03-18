@@ -6,11 +6,10 @@ const { encrypt } = require("../controllers/encrypt");
 let statusCode=500
 
 router.post("/", async (req, res) => {
-  let {email, lastName, name, password} = req.body;
-  
-  try{
-    statusCode=400
-    if( !email || !lastName ||!name ||!password ) throw new Error('Some fields were empty')
+    const {email, lastName, name, password, country, loginWithSocial} = req.body;
+    if(!loginWithSocial){
+      if(!email || !lastName ||!name ||!password || !country) return res.status(400).json({ error: "Some fields where empty" });
+    }
 
     //Encriptación de la contraseña
     req.body.password = encrypt(password);
@@ -23,7 +22,7 @@ router.post("/", async (req, res) => {
 
     //Comprobación que no exista un email igual en la base de datos
     statusCode=400
-    if(result) throw new Error('This email has already been used')
+    if(result) return res.status(400).json({error: 'This email has already been used'})
 
     else{
       try {
@@ -34,10 +33,5 @@ router.post("/", async (req, res) => {
         return res.status(400).json(error);
       }
     }
-  }
-  catch(err){
-    return res.status(statusCode).json({error: err.message})
-  }
-    
   });
   module.exports = router;
