@@ -14,7 +14,7 @@ router.get('/find/:id', async (req, res)=>{
         if(id==='all'){
             const products = Product.findAll()
             let totalProducts = Object.keys(products).length
-            if(totalProducts) return res.status(200).json([totalProducts, ...products])
+            if(totalProducts) return res.status(200).json({totalProducts, products:[...products]})
             else throw new Error('No products have been added yet!')
         }
         statusCode=400
