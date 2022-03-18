@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const {decrypt} = require('../controllers/encrypt');
+const {decrypt, encrypt} = require('../controllers/encrypt');
 const sequelize = require('../db');
 const { User, Product } = sequelize.models;
 const { verifyUserToken } = require('../controllers/verifyToken');
@@ -31,14 +31,13 @@ router.post('/login', async(req,res) => {
             //Y está iniciando sesion con alguna red social
             if(loginWithSocial){
                   try {
+                        req.body.password = encrypt(req.body.password)
                         await User.create(req.body)
-                        return res.status(201).json({success: 'User created in LogIn'})
+                        return res.status(201).json({success: 'New user created'})
                   } catch (error) {
                         return res.status(400).json({error: error})
                   }
             }
-      } else if (result && loginWithSocial){
-            return res.status(400).json({error: 'User already exist' })
       }
 
       result = result.dataValues;
