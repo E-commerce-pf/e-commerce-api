@@ -6,7 +6,6 @@ const { encrypt } = require("../controllers/encrypt");
 let statusCode=500
 
 router.post("/", async (req, res) => {
-    console.log(req.body)
     const {email, lastName, name, password, country, loginWithSocial} = req.body;
     if(!loginWithSocial){
       if(!email || !lastName ||!name ||!password || !country) return res.status(400).json({ error: "Some fields where empty" });
@@ -34,10 +33,5 @@ router.post("/", async (req, res) => {
         return res.status(400).json(error);
       }
     }
-  }
-  catch(err){
-    return res.status(statusCode).json({error: err.message})
-  }
-    
   });
   module.exports = router;
