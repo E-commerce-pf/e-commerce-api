@@ -35,6 +35,15 @@ module.exports = (sequelize) => {
     country: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    postedProducts: {
+      type: DataTypes.ARRAY(DataTypes.STRING) // Acá se guardan los id de los productos posteados por el usuario
+    },
+    cart:{
+      type: DataTypes.ARRAY(DataTypes.JSON)
+    },
+    history:{
+      type: DataTypes.ARRAY(DataTypes.STRING)
     }
   });
 };

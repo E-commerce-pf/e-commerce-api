@@ -1,34 +1,34 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const {decrypt} = require('../controllers/encrypt');
-const sequelise = require('../db');
-const { User } = sequelise.models;
+const sequelize = require('../db');
+const { User, Product } = sequelize.models;
 const { verifyUserToken } = require('../controllers/verifyToken');
 
 router.post('/login', async(req,res) => {
-      //Solamente se puede registrar con el email 
       let result;
+      let {email, password, loginWithSocial} = req.body;
       //Verificamos que nos hayan proporcionado los datos necesarios
-
-      if(!req.body.loginWithSocial){
-            if(!req.body.email || !req.body.password) return res.status(400).json({error: 'The necessary data to enter was not sent'});
+      if(!loginWithSocial){
+            if(!email || !password) return res.status(400).json({error: 'The necessary data to enter was not sent'});
       }
 
       try {
             //Buscamos el usuario en la base de datos
             result = await User.findOne({
                   where:{
-                        email : req.body.email
+                        email
                   }
             });
       } catch (error) {
-            return res.status(400).json( error );
+            //En el caso de que no haya encontrado el usuario 
+            return res.status(400).json({error: error.message});
       }
 
       //En el caso de que no haya encontrado el usuario 
       if(!result){
             //Y está iniciando sesion con alguna red social
-            if(req.body.loginWithSocial){
+            if(loginWithSocial){
                   try {
                         await User.create(req.body)
                         return res.status(201).json({succes: 'User created in LogIn'})
@@ -44,7 +44,7 @@ router.post('/login', async(req,res) => {
       try {
             //Desencriptamos la contraseña
             const passwordDecrypt = decrypt(result.password);
-            if(passwordDecrypt === req.body.password){
+            if(passwordDecrypt === password){
                   result.password = passwordDecrypt;
                   //Evaluamos el rol que tiene este usuario
                   let role = 'User'
@@ -72,6 +72,49 @@ router.post('/login', async(req,res) => {
 
       } catch (error) {
             return res.status(400).json(error)
+      }
+})
+
+router.get('/products/:userId', async (req, res)=>{
+      let {userId} = req.params
+      
+      try{
+            statusCode = 400
+            if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(userId)) throw new Error("Invalid ID format")
+
+            const user = await User.findByPk(userId)
+
+            statusCode = 404
+            if(!user) throw new Error("No user found with given ID")
+
+            if(user.postedProducts) {
+
+                  let products = Promise.all(user.postedProducts.map(async e=>{
+                        let product = await Product.findByPk(e)
+                        return product??'Product not found'
+                  }))
+                  
+                  return res.status(200).json(products)
+            }
+            else throw new Error("This user has no products on sale")
+      }
+      catch(err){ return res.status(statusCode).json({error: err.message}) }
+})
+
+router.get('/find/:userId', async (req, res)=>{
+      let {userId} = req.params
+
+      try{
+            statusCode = 400
+            if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(userId)) throw new Error("Invalid ID format")
+            const user = await User.findByPk(userId)
+
+            statusCode = 404
+            if(!user) throw new Error("No user found with given ID")
+            else return res.status(200).json(user)
+      }
+      catch(err){
+            return res.status(statusCode).json({error: err.message})
       }
 })
 
