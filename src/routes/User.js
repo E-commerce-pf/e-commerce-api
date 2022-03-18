@@ -5,11 +5,14 @@ const sequelise = require('../db');
 const { User } = sequelise.models;
 const { verifyUserToken } = require('../controllers/verifyToken');
 
-router.get('/login', async(req,res) => {
+router.post('/login', async(req,res) => {
       //Solamente se puede registrar con el email 
       let result;
       //Verificamos que nos hayan proporcionado los datos necesarios
-      if(!req.body.email || !req.body.password) return res.status(400).json({error: 'The necessary data to enter was not sent'});
+
+      if(!req.body.loginWithSocial){
+            if(!req.body.email || !req.body.password) return res.status(400).json({error: 'The necessary data to enter was not sent'});
+      }
 
       try {
             //Buscamos el usuario en la base de datos
@@ -23,7 +26,19 @@ router.get('/login', async(req,res) => {
       }
 
       //En el caso de que no haya encontrado el usuario 
-      if(!result) return res.status(400).json({error: 'User not found'});
+      if(!result){
+            //Y está iniciando sesion con alguna red social
+            if(req.body.loginWithSocial){
+                  try {
+                        await User.create(req.body)
+                        return res.status(201).json({succes: 'User created in LogIn'})
+                  } catch (error) {
+                        return res.status(400).json({error: error})
+                  }
+            }
+      }
+      
+      return res.status(400).json({error: 'User not found'});
 
       result = result.dataValues;
       try {
