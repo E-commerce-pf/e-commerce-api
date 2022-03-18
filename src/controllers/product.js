@@ -43,6 +43,17 @@ const createProduct = async (req, res) => {
   }
 };
 
+const getAllProducts = async () => {
+  try {
+    return await Product.findAll({
+      include: [{ model: Category, attributes: ["name"] }, Review],
+    });
+  } catch (error) {
+    return error.message;
+  }
+};
+
 module.exports = {
   createProduct,
+  getAllProducts,
 };

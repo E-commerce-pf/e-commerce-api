@@ -1,23 +1,25 @@
 const router = require("express").Router();
-const { createProduct } = require("../controllers/product");
+const { createProduct, getAllProducts } = require("../controllers/product");
 const { verifyUserToken } = require("../controllers/verifyToken");
 const sequelize = require("../db");
 const { Product, Category, Review } = sequelize.models;
 
 router.post("/", verifyUserToken, createProduct);
 
+router.get("/", async (req, res) => {
+  try {
+    const products = await getAllProducts();
+    return res.json(products);
+  } catch (error) {
+    return res.status(404).json({ error: error.message });
+  }
+});
+
 let statusCode = 500;
 router.get("/:id", async (req, res) => {
-  let { id } = req.params;
+  const { id } = req.params;
 
   try {
-    if (!id) {
-      const products = await Product.findAll({
-        include: [{ model: Category, attributes: ["name"], Review }],
-      });
-      if (totalProducts) return res.json(products);
-      else throw new Error("No products have been added yet!");
-    }
     statusCode = 400;
     if (
       !/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(
