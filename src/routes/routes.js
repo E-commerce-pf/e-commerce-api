@@ -25,6 +25,7 @@ const registerRoute = require('./Register');
 const reviewRoute= require('./Review')
 const productRoute = require('./Product')
 const cartRoute = require('./Cart')
+const adminRoute = require('./Admin')
 
 //DEFINIMOS LOS CASOS DE USO DE LAS RUTAS
 router.use('/user', user);
@@ -32,6 +33,8 @@ router.use('/register', registerRoute);
 router.use('/review', reviewRoute);
 router.use('/product', productRoute);
 router.use('/cart', cartRoute);
+router.use('/admin', adminRoute);
+
 
 
 module.exports = router;

@@ -16,7 +16,8 @@ router.post("/:productId/:userId", async (req, res) => {
     //let product=await Product.findByPk(productId);
     let product=await Product.findOne({
         include: User
-    }).dataValues;
+    }, { where: {id:productId}}
+    ).dataValues;
 
     if (!product) return res.status(400).json({ error: 'Product not found.' });
     //Buscamos al dueño del producto
