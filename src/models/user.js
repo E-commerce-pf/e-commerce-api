@@ -11,6 +11,11 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    loginWithSocial:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: true
+    },
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -21,14 +26,11 @@ module.exports = (sequelize) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     isAdmin:{
       type : DataTypes.BOOLEAN,
       defaultValue: false
-    },
-    genre:{
-      type: DataTypes.ENUM('Hombre', 'Mujer', 'Otro', 'Prefiero no decirlo')
     },
     country: {
       type: DataTypes.STRING,

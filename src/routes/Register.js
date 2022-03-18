@@ -6,11 +6,11 @@ const { encrypt } = require("../controllers/encrypt");
 let statusCode=500
 
 router.post("/", async (req, res) => {
-  let {email, lastName, name, password} = req.body;
-  
-  try{
-    statusCode=400
-    if( !email || !lastName ||!name ||!password ) throw new Error('Some fields were empty')
+    console.log(req.body)
+    const {email, lastName, name, password, country, loginWithSocial} = req.body;
+    if(!loginWithSocial){
+      if(!email || !lastName ||!name ||!password || !country) return res.status(400).json({ error: "Some fields where empty" });
+    }
 
     //Encriptación de la contraseña
     req.body.password = encrypt(password);
