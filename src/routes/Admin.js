@@ -148,13 +148,13 @@ router.delete('/user/delete/:id', verifyAdminToken, async (req, res)=>{
     }
 })
 
-router.delete('/categories/create/', verifyAdminToken, async (req, res)=>{
+router.put('/categories/create/', verifyAdminToken, async (req, res)=>{
     let {categories} = req.body
 
     try{
-        let existingCategories = Cate
-        statusCode = 400
-        if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(id)) throw new Error("No new categories were received")
+        let existingCategories = await Category.findAll();
+
+        if(categories.every(cat=>existingCategories.includes(cat))) return res.status(200).json({status:'None of the sent categories were new'})
 
         const user = await User.findByPk(id)
 
