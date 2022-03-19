@@ -58,23 +58,23 @@ router.post('/',async (req, res) => {
         }
       );
     }
-    return res.status(200).send({ success: 'Successfully update a review.'});
+    return res.status(200).send({ status: 'Successfully updated review.'});
   }
   const newReview = await createReview(userId,score,comment);
 
   const review = await product.addReview(newReview).catch(e => { console.log(e); return false; });
   if (review) {
-    res.status(200).send({ success: 'Successfully added a review.', result: newReview.id });
+    res.status(200).send({ success: 'Successfully added review.', result: newReview.id });
   } else {
     res.status(503).send({ error: 'There was a problem processing your request.' });
   }
 
 });
-router.get('/moreVoted',async (req,res)=>{
+router.get('/mostvoted',async (req,res)=>{
   try {
     let {number}=req.body;
-    let ProductMostVoteds=await mostVoted(number);
-    res.status(201).send(ProductMostVoteds);
+    let mostVotedReviews=await mostVoted(number);
+    res.status(201).send(mostVotedReviews);
   } catch (error) {
     console.log(error.message)
     res.status(503).send({ error: error.message });

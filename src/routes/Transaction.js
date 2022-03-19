@@ -33,7 +33,7 @@ router.post("/:productId/:userId", async (req, res) => {
         await userClient.addTransaction(transactionClient.id);
         await userOwner.addTransaction(transactionOwner.id);
 
-        return res.status(200).send({succes:"Transaction created successfuly"});
+        return res.status(200).send({status:"Transaction created successfuly"});
     } catch (error) {
         console.log(error);
         return res.status(500).json(error);

@@ -33,7 +33,7 @@ router.post('/login', async(req,res) => {
                   try {
                         req.body.password = encrypt(req.body.password)
                         await User.create(req.body)
-                        return res.status(201).json({success: 'New user created'})
+                        return res.status(201).json({status: 'New user created'})
                   } catch (error) {
                         return res.status(400).json({error: error})
                   }
