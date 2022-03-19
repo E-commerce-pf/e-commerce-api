@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const sequelize = require('../db');
-const { User, Product, Transaction } = sequelize.models;
+const { User, Product, Review } = sequelize.models;
 const {
   createReview,
+  mostVoted
 } = require("../controllers/review");
 
 router.post('/',async (req, res) => {
@@ -13,10 +14,8 @@ router.post('/',async (req, res) => {
     where:{
       id: userId
     },
-    include: Transaction
   }).then(r=>r.dataValues).catch(() => false);
-  if(!sender.Transactions.find(t=>t.product.id===productId))
-  return res.status(400).send({ error: 'User not buy this product.' });
+  
   if (!sender) {
     return res.status(400).send({ error: 'Missing or invalid sender ID.' });
   }
@@ -29,15 +28,41 @@ router.post('/',async (req, res) => {
     return res.status(400).send({ error: 'You must include a punctuation.' });
   }
 
-  const product = await Product.findByPk(productId).catch(() => false)
-
+  const product = await Product.findOne({
+    where:{
+      id:productId
+    },
+    include: Review
+  })
   if (!product) {
     return res.status(404).send({ error: 'Product does not exist.' });
+  }
+  let reviewId;
+  let userVoted=product.Reviews?.find((review)=>{
+    if(review.userId===userId){
+      reviewId=review.id;
+      return true;
+    }
+    else return false;
+  });
+  if (userVoted) {
+    for (const key in req.body) {
+      await Review.update(
+        {
+          [key]: req.body[key],
+        },
+        {
+          where: {
+            id: reviewId,
+          },
+        }
+      );
+    }
+    return res.status(200).send({ success: 'Successfully update a review.'});
   }
   const newReview = await createReview(userId,score,comment);
 
   const review = await product.addReview(newReview).catch(e => { console.log(e); return false; });
-
   if (review) {
     res.status(200).send({ success: 'Successfully added a review.', result: newReview.id });
   } else {
@@ -45,4 +70,15 @@ router.post('/',async (req, res) => {
   }
 
 });
+router.get('/moreVoted',async (req,res)=>{
+  try {
+    let {number}=req.body;
+    let ProductMostVoteds=await mostVoted(number);
+    res.status(201).send(ProductMostVoteds);
+  } catch (error) {
+    console.log(error.message)
+    res.status(503).send({ error: error.message });
+  }
+  
+})
 module.exports = router;
