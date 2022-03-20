@@ -1,10 +1,9 @@
 # Product routes
 
 The product routes allow to get all or one particular product.
-
 &nbsp;  
 &nbsp;  
-This route require an user token sent as a header:
+This route requires an user token sent as a header:
 
 ```javascript
 {
