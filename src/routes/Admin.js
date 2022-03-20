@@ -8,20 +8,33 @@ const { verifyAdminToken } = require('../controllers/verifyToken');
 const uuid = /[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/
 let statusCode
 
-router.put('/product/update/:productId', verifyAdminToken, async (req, res)=>{
-    let {productId} = req.params
-    let validEntries = Object.entries(req.body).filter(([, value]) => value != null).reduce((acc, [key, value])=>({...acc, [key]:value}),{}) 
+router.put('/product/update/:id', verifyAdminToken, async (req, res)=>{
+    let {id} = req.params
+    let {title, description, image, price, discount, stock, sales, categories} = req.body
+    //let validEntries = Object.entries(req.body).filter(([, value]) => value != null).reduce((acc, [key, value])=>({...acc, [key]:value}),{}) 
     try{
         statusCode = 400
-        if(!uuid.test(productId)) throw new Error('Invalid product ID format')
+        if(!uuid.test(id)) throw new Error('Invalid product ID format')
 
-        const product = await Product.findByPk(productId)
+        const product = await Product.findByPk(id)
 
         statusCode = 404
         if(!product) throw new Error('No product matches given ID')
 
-        const success = await Promise.all(Object.entries(validEntries).map(async ([key, value])=>await Product.update({[key]:value}, {where:{id:productId}})))
+        //const success = await Promise.all(Object.entries(validEntries).map(async ([key, value])=>await Product.update({[key]:value}, {where:{id}})))
 
+        const success = await Product.update(
+            {
+                title:title??product.title,
+                description:description??product.description,
+                image:image??product.image,
+                price:discount?price-(price*discount):price,
+                stock:stock??product.stock, 
+                sales:sales??product.sales,
+                categories:categories??product.categories}, 
+            {where: { id }}
+        ).then(result => result[0]);
+        
         statusCode = 500
         if(success) return res.status(200).json({status:'Product updated', success})
         else throw new Error('Unexpected error ocurred')
@@ -30,38 +43,35 @@ router.put('/product/update/:productId', verifyAdminToken, async (req, res)=>{
 })
 
 
-router.delete('/product/delete/:productId', verifyAdminToken, async (req, res)=>{
-    let {productId} = req.params
+router.delete('/product/delete/:id', verifyAdminToken, async (req, res)=>{
+    let {id} = req.params
 
     try{
         statusCode = 400
-        if(!uuid.test(productId)) throw new Error('Invalid product ID format')
+        if(!uuid.test(id)) throw new Error('Invalid product ID format')
 
-        const product = await Product.findByPk(productId)
+        const product = await Product.findByPk(id)
 
         statusCode = 404
         if(!product) throw new Error('No product matches given ID')
-
-        const success = await Product.update(
-            {title, description, image, price:price-(price*discount), stock, sales, categories}, 
-            {where: { id: productId }}
-        ).then(result => result[0]);
-
-        if(success) return res.status(200).json({status:`Product '${product.title}' deleted`})
+        else {
+            product.destroy() 
+            return res.status(200).json({status:`Product '${product.title}' deleted`})
+        }
     }
     catch(err){ return res.status(statusCode).json({error:err.message}) }
 })
 
 
-router.get('/transactions/:id', verifyAdminToken, async (req, res)=>{
+router.get('/transactions/find/:id', verifyAdminToken, async (req, res)=>{
     let {id} = req.params
     
     try{
         if(id==='all'){
             const transactions = Transaction.findAll()
-            let totaltransactions = Object.keys(transactions).length
+            let totalTransactions = Object.keys(transactions).length
             statusCode = 404
-            if(totalProducts) return res.status(200).json({total:totaltransactions, transactions:[...transactions]})
+            if(totalTransactions) return res.status(200).json({total:totalTransactions, transactions:[...transactions]})
             else throw new Error('No transactions found!')
         }
         statusCode=400
@@ -77,7 +87,7 @@ router.get('/transactions/:id', verifyAdminToken, async (req, res)=>{
 })
 
 
-router.put('/transactions/:id', verifyAdminToken, async (req, res)=>{
+router.put('/transactions/update/:id', verifyAdminToken, async (req, res)=>{
     let {id} = req.params
     let {state} = req.body
     
@@ -92,7 +102,7 @@ router.put('/transactions/:id', verifyAdminToken, async (req, res)=>{
         else {
             const success = await Transaction.update(
                 {state}, 
-                {where: { id: productId }}
+                {where: { id }}
             ).then(result => result[0]);
 
             return res.status(200).json({status:'Transaction updated', success}) 
@@ -140,7 +150,7 @@ router.delete('/user/delete/:id', verifyAdminToken, async (req, res)=>{
         if(!user) throw new Error("No user found with given ID")
         else {
             user.destroy()
-            return res.status(200).json({status:`User ${user.name+' '+user.lastName} deleted`})
+            return res.status(200).json({status:`User '${user.name+' '+user.lastName}' deleted`})
         }
     }
     catch(err){
@@ -163,7 +173,7 @@ router.post('/categories/create', verifyAdminToken, async (req, res)=>{
         let success = await Promise.all(newCategories.map(async cat=>await Category.create({name:cat})))
 
         statusCode = 500
-        if(success) res.status(201).json({status:'Categories created:', newCategories})
+        if(success) res.status(201).json({status:'Categories created', newCategories})
         else throw new Error("Unexpected error occurred")
     }
     catch(err){

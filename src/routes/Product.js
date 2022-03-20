@@ -4,29 +4,23 @@ const { verifyUserToken } = require("../controllers/verifyToken");
 const sequelize = require("../db");
 const { Product, Category, Review } = sequelize.models;
 
+let statusCode = 500
+
 router.post("/", verifyUserToken, createProduct);
 
-router.get("/", async (req, res) => {
-  try {
-    const products = await getAllProducts();
-    return res.json(products);
-  } catch (error) {
-    return res.status(404).json({ error: error.message });
-  }
-});
-
-let statusCode = 500;
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
+    if(id==='all'){
+      const products = await getAllProducts();
+      let totalProducts = Object.keys(products).length
+      statusCode= 404
+      if(totalProducts) return res.status(200).json({total:totalProducts, products});
+      else throw new Error('No products found!')
+    }
     statusCode = 400;
-    if (
-      !/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(
-        id
-      )
-    )
-      throw new Error("Invalid ID format");
+    if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(id)) throw new Error('Invalid transaction ID format')
 
     const product = await Product.findOne({
       where: {

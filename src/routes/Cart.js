@@ -8,7 +8,7 @@ const { verifyUserToken } = require('../controllers/verifyToken');
 let statusCode=500
 
 // Agregar o borrar del carrito
-router.post('/cart', async (req, res)=>{
+router.put('/cart', async (req, res)=>{
     let {userId, productId, method, amount} = req.body
 
     let uuid = /[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/
@@ -34,7 +34,7 @@ router.post('/cart', async (req, res)=>{
             :cart.splice(foundProduct, 1)
         })
 
-        return res.status(200).json({success: 'Operation completed', cart: user.cart}) 
+        return res.status(200).json({status: 'Operation complete', cart: user.cart}) 
     }
     catch(err){ return res.status(statusCode).json({error: err.message}) }
 })
