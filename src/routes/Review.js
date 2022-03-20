@@ -73,6 +73,7 @@ router.post('/',async (req, res) => {
 router.get('/mostvoted',async (req,res)=>{
   try {
     let {number}=req.body;
+    if(!number&&number!==0) number=4; 
     let mostVotedReviews=await mostVoted(number);
     res.status(201).send(mostVotedReviews);
   } catch (error) {
