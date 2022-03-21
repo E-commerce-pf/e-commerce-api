@@ -6,7 +6,7 @@ const { Product, Category, Review } = sequelize.models;
 
 let statusCode = 500
 
-router.post("/", verifyUserToken, createProduct);
+router.post("/", createProduct);
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -26,7 +26,7 @@ router.get("/:id", async (req, res) => {
       where: {
         id,
       },
-      include: [{ model: Category, attributes: ["name"], Review }],
+      include: [{ model: Category, attributes: ["name"]},Review],
     });
 
     statusCode = 404;
