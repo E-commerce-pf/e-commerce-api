@@ -2,7 +2,7 @@ const router = require("express").Router();
 const sequelize = require("../db");
 const jwt = require('jsonwebtoken');
 const {decrypt} = require('../controllers/encrypt');
-const { User, Product, Register, Transaction, Category } = sequelize.models;
+const { User, Product, Transaction, Category } = sequelize.models;
 const { verifyAdminToken } = require('../controllers/verifyToken');
 
 const uuid = /[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/
@@ -36,14 +36,14 @@ router.put('/product/update/:id', verifyAdminToken, async (req, res)=>{
         ).then(result => result[0]);
         
         statusCode = 500
-        if(success) return res.status(200).json({status:'Product updated', success})
+        if(success) return res.status(200).json({success:'Product updated'})
         else throw new Error('Unexpected error ocurred')
     }
     catch(err){ return res.status(statusCode).json({error:err.message}) }
 })
 
 
-router.delete('/product/delete/:id', verifyAdminToken, async (req, res)=>{
+router.delete('/product/:id', verifyAdminToken, async (req, res)=>{
     let {id} = req.params
 
     try{
@@ -56,7 +56,7 @@ router.delete('/product/delete/:id', verifyAdminToken, async (req, res)=>{
         if(!product) throw new Error('No product matches given ID')
         else {
             product.destroy() 
-            return res.status(200).json({status:`Product '${product.title}' deleted`})
+            return res.status(200).json({success:`Product '${product.title}' deleted`})
         }
     }
     catch(err){ return res.status(statusCode).json({error:err.message}) }
@@ -117,22 +117,22 @@ router.put('/user/update/:id', verifyAdminToken, async (req, res)=>{
     let validEntries = Object.entries(req.body).filter(([, value]) => value != null).reduce((acc, [key, value])=>({...acc, [key]:value}),{}) 
 
     try{
-          statusCode = 400
-          if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(id)) throw new Error("Invalid ID format")
-          
-          const user = await User.findByPk(id)
+        statusCode = 400
+        if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(id)) throw new Error("Invalid ID format")
+        
+        const user = await User.findByPk(id)
 
-          statusCode = 404
-          if(!user) throw new Error("No user found with given ID")
-          
-          const success = await Promise.all(Object.entries(validEntries).map(async ([key, value])=>await Product.update({[key]:value}, {where:{id}})))
+        statusCode = 404
+        if(!user) throw new Error("No user found with given ID")
+    
+        const success = await Promise.all(Object.entries(validEntries).map(async ([key, value])=>await Product.update({[key]:value}, {where:{id}})))
 
-          statusCode = 500
-          if(success) return res.status(200).json({status:'User updated', success})
-          else throw new Error('Unexpected error ocurred')
+        statusCode = 500
+        if(success) return res.status(200).json({status:'User updated', success})
+        else throw new Error('Unexpected error ocurred')
     }
     catch(err){
-          return res.status(statusCode).json({error: err.message})
+        return res.status(statusCode).json({error: err.message})
     }
 })
 
@@ -204,5 +204,10 @@ router.delete('/categories/delete', verifyAdminToken, async (req, res)=>{
     }
 })
 
+//TRAER TODOS LOS USUARIOS
+router.get('/users', verifyAdminToken, async(req, res)=>{
+    const result = await User.findAll().then(res => res.map(item => item.dataValues ) );
+    res.send(result);
+})
 
 module.exports = router;
