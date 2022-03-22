@@ -19,12 +19,14 @@ const Product = (sequelize) => {
       },
       image: {
         type: DataTypes.TEXT,
+        allowNull: true
       },
       price: {
         type: DataTypes.INTEGER,
         validate: {
           isNumeric: true,
         },
+        allowNull: false
       },
       stock: {
         type: DataTypes.INTEGER,

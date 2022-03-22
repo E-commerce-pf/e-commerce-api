@@ -2,17 +2,9 @@ const sequelize = require("../db");
 const { Product, Category, Review } = sequelize.models;
 
 const createProduct = async (req, res) => {
-  const {
-    title,
-    description,
-    image,
-    price,
-    stock,
-    sales,
-    discount,
-    categories,
-  } = req.body;
+  const { title, price, stock, description ,categories } = req.body;
 
+  if(!title || !price || !stock || !description) return res.status(400).json({error: 'Some fields are empty'});
   try {
     const categoriesDB = await Category.findAll({
       where: { name: categories },
@@ -22,22 +14,14 @@ const createProduct = async (req, res) => {
         .status(400)
         .json({ errorMessage: "One provided category is not validate" });
 
-    let newProduct = await Product.create({
-      title,
-      description,
-      image,
-      price,
-      stock,
-      sales,
-      discount,
-    });
+    let newProduct = await Product.create({...req.body});
 
     await newProduct.addCategory(categoriesDB);
 
     const newCategory = categoriesDB.map((category) => category.name);
     newProduct = { ...newProduct.dataValues, categories: newCategory };
 
-    return res.json(newProduct);
+    return res.status(200).json({success : 'A new product created successfuly'});
   } catch (error) {
     res.status(400).json({ errorMessage: error.message });
   }

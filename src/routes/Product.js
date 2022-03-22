@@ -1,12 +1,12 @@
 const router = require("express").Router();
 const { createProduct, getAllProducts } = require("../controllers/product");
-const { verifyUserToken } = require("../controllers/verifyToken");
+const { verifyUserToken, verifyAdminToken } = require("../controllers/verifyToken");
 const sequelize = require("../db");
 const { Product, Category, Review } = sequelize.models;
 
 let statusCode = 500
 
-router.post("/", createProduct);
+router.post("/", verifyAdminToken ,createProduct);
 
 //Traer todos los productos
 router.get('/', async(req, res)=>{
