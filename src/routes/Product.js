@@ -8,6 +8,13 @@ let statusCode = 500
 
 router.post("/", createProduct);
 
+//Traer todos los productos
+router.get('/', async(req, res)=>{
+  const result = await Product.findAll()
+  .then( res => res.map(item => item.dataValues));
+  res.status(200).json({length : result.length, result});
+})
+
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
 

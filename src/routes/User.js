@@ -6,9 +6,9 @@ const { User, Product } = sequelize.models;
 const { verifyUserToken } = require('../controllers/verifyToken');
 
 router.post('/login', async(req,res) => {
-      let result;
-      let {email, password, loginWithSocial} = req.body;
       console.log(req.body)
+      let result;
+      let {email, password, loginWithSocial, isAdmin} = req.body;
       //Verificamos que nos hayan proporcionado los datos necesarios
       if(!loginWithSocial){
             if(!email || !password) return res.status(400).json({error: 'The necessary data to enter was not sent'});
@@ -18,14 +18,14 @@ router.post('/login', async(req,res) => {
             //Buscamos el usuario en la base de datos
             result = await User.findOne({
                   where:{
-                        email
+                        email,
+                        isAdmin
                   }
             });
       } catch (error) {
             //En el caso de que no haya encontrado el usuario 
             return res.status(400).json({error: error.message});
       }
-
       //En el caso de que no haya encontrado el usuario 
       if(!result){
             //Y está iniciando sesion con alguna red social
@@ -38,9 +38,11 @@ router.post('/login', async(req,res) => {
                         return res.status(400).json({error: error})
                   }
             }
+            return res.status(400).json({error: 'User not found'})
       }
 
       result = result.dataValues;
+      console.log(result);
       try {
             //Desencriptamos la contraseña
             const passwordDecrypt = decrypt(result.password);
