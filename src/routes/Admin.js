@@ -125,10 +125,10 @@ router.put('/user/update/:id', verifyAdminToken, async (req, res)=>{
         statusCode = 404
         if(!user) throw new Error("No user found with given ID")
     
-        const success = await Promise.all(Object.entries(validEntries).map(async ([key, value])=>await Product.update({[key]:value}, {where:{id}})))
+        const success = await Promise.all(Object.entries(validEntries).map(async ([key, value])=>await User.update({[key]:value}, {where:{id}})))
 
         statusCode = 500
-        if(success) return res.status(200).json({status:'User updated', success})
+        if(success) return res.status(200).json({status:'User updated', user : await User.findByPk(id)})
         else throw new Error('Unexpected error ocurred')
     }
     catch(err){
