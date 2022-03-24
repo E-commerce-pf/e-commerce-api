@@ -1,9 +1,11 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+require("express-async-errors");
 const morgan = require("morgan");
 const routes = require("./routes/routes");
 const cors = require("cors");
+const middleware = require("./utils/midddleware");
 const { CORS_URL } = process.env;
 
 const server = express();
@@ -26,6 +28,9 @@ server.use((req, res, next) => {
 });
 
 server.use("/api", routes);
+
+server.use(middleware.unknownEndpoint);
+server.use(middleware.errorHandler);
 
 // Error catching endware.
 server.use((err, req, res, next) => {
