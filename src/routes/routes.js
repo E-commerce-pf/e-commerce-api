@@ -11,6 +11,7 @@ const categoryRoute = require("./Category");
 const adminRoute = require("./Admin");
 const routerUsers = require("./Users");
 const routerReviews = require("./Reviews");
+const routerTransaction = require("./Transaction");
 const paymentRouter = require("./Payment");
 
 //DEFINIMOS LOS CASOS DE USO DE LAS RUTAS
@@ -23,6 +24,7 @@ router.use("/cart", cartRoute);
 router.use("/category", categoryRoute);
 router.use("/admin", adminRoute);
 router.use("/users", routerUsers);
+router.use("/transaction", routerTransaction);
 router.use("/payment", paymentRouter);
 
 module.exports = router;
