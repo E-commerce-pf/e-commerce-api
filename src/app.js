@@ -1,5 +1,4 @@
 const express = require("express");
-
 require("express-async-errors");
 const morgan = require("morgan");
 const routes = require("./routes/routes");
@@ -11,7 +10,7 @@ const server = express();
 
 server.name = "API";
 server.use(cors());
-server.use(express.json())
+server.use(express.json());
 server.use(morgan("dev"));
 server.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
