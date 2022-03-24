@@ -8,6 +8,53 @@ const { verifyAdminToken } = require('../controllers/verifyToken');
 const uuid = /[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/
 let statusCode
 
+router.post('/login', async(req, res)=>{
+    let result
+    let {email, password} = req.body;
+    try {
+        result = await User.findOne({
+            where:{
+                email,
+                isAdmin : true
+            }
+        });
+    } catch (error) {
+        return res.status(400).json({error: error.message});
+    }
+
+    if(!result) return res.status(400).json({error : 'User not found'});
+
+    result = result.dataValues;
+    try {
+        const passwordDecrypt = decrypt(result.password);
+        if(passwordDecrypt === password){
+            result.password = passwordDecrypt;
+            //Evaluamos el rol que tiene este usuario
+            //Creamos el token de acceso
+            const accessToken = jwt.sign({
+                role : 'Admin'
+            },
+            process.env.JWT_KEY,
+            { expiresIn : 60 * 60 * 24 }
+            );
+            return res.status(200).json({
+                userId : result.id,
+                name : result.name,
+                lastName : result.lastName,
+                email : result.email,
+                accessToken
+            });
+        } else {
+                return res.status(400).json({error: 'Data doesnt match'})
+        }
+    } catch (error) {
+        return res.status(400).json({error : error.message});
+    }
+})
+
+
+
+
 router.put('/product/update/:id', verifyAdminToken, async (req, res)=>{
     let {id} = req.params
     let {title, description, image, price, discount, stock, sales, categories} = req.body
