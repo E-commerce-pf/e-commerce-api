@@ -32,7 +32,7 @@ const sendEmail = (req, res) => {
       if (err) {
         return res.status(404).json({ error: err.message });
       }
-      return res.json(info.response);
+      return res.json({success: "Email Enviado!"});
     }
   );
 };
