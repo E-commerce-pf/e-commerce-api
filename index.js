@@ -23,7 +23,7 @@ sequelize.sync({ force: false }).then(() => {
         where: {
           title: products[i].title,
           price: products[i].price,
-          image: products[i].image,
+          images: products[i].image,
           description: products[i].description,
           stock: products[i].stock,
           sales: products[i].sales,
@@ -35,6 +35,6 @@ sequelize.sync({ force: false }).then(() => {
     }
 
     console.log("Products and categories pre charged :)");
-    */
+     */
   });
 });

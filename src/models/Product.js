@@ -17,7 +17,7 @@ const Product = (sequelize) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      image: {
+      images: {
         type: DataTypes.TEXT,
         allowNull: true
       },

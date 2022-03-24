@@ -36,9 +36,13 @@ router.get("/:id", async (req, res) => {
       include: [{ model: Category, attributes: ["name"]},Review],
     });
 
+
     statusCode = 404;
     if (!product) throw new Error("Product not found");
-    else return res.json(product);
+
+    product.dataValues.images = product.dataValues.images.split('-');
+    console.log(product.dataValues);
+    return res.json(product);
   } catch (err) {
     return res.status(statusCode).json({ error: err.message });
   }
