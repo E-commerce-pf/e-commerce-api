@@ -1,5 +1,5 @@
 const sequelize = require('../db');
-const { Transaction } = sequelize.models;
+const { Transaction, User } = sequelize.models;
 const createTransaction= async (state,cart)=>
 {    
         return await Transaction.create({
@@ -20,7 +20,17 @@ const updateTransaction= async (state,transactionId)=>
             }
           );
 }
+const getUserTransactionsComplete=async (userId)=>{
+  let user= await User.findOne({
+    where:{
+        id:userId,
+    },
+    include:[{model: Transaction, where:{state:"complete"}}]
+  });
+  return user?user.Transactions:[];
+}
 module.exports = {
     createTransaction,
-    updateTransaction
+    updateTransaction,
+    getUserTransactionsComplete
   };

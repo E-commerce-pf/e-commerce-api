@@ -3,11 +3,11 @@ const sequelize = require('../db');
 const { User, Product, Review } = sequelize.models;
 const {
   createReview,
-  mostVoted
+  mostVoted,
+  userBuyProduct
 } = require("../controllers/review");
 
 router.post('/',async (req, res) => {
-
   const { userId, comment, score, productId} = req.body;
 
   const sender = await User.findOne({
@@ -15,6 +15,9 @@ router.post('/',async (req, res) => {
       id: userId
     },
   }).then(r=>r.dataValues).catch(() => false);
+
+  if (!await userBuyProduct(userId,productId))
+  return res.status(400).send({ error: 'User not buy this product', productId });
   
   if (!sender) {
     return res.status(400).send({ error: 'Missing or invalid sender ID.' });
