@@ -5,6 +5,7 @@ const categories = require("./src/data/categories");
 const products = require("./src/data/products");
 const sequelize = require("./src/db");
 const { Product, Category, Review, User } = sequelize.models;
+
 sequelize.sync({ force: false }).then(() => {
   server.listen(PORT, async () => {
     console.log(`Server listening on port ${PORT}`);

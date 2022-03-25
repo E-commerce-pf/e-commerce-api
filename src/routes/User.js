@@ -30,8 +30,8 @@ router.post('/login', async(req,res) => {
             if(loginWithSocial){
                   try {
                         req.body.password = encrypt(req.body.password)
-                        await User.create(req.body)
-                        return res.status(201).json({success: 'New user created'})
+                        const newUser = await User.create(req.body)
+                        return res.status(201).json({success: 'New user created', user : newUser})
                   } catch (error) {
                         return res.status(400).json({error: 'error'})
                   }
@@ -59,13 +59,13 @@ router.post('/login', async(req,res) => {
                   process.env.JWT_KEY,
                   { expiresIn : 60 * 60 * 24 }
                   );
-                  return res.status(200).json({
+                  return res.status(200).json({ success : 'Login Succes', user :{
                         userId : result.id,
                         name : result.name,
                         lastName : result.lastName,
                         email : result.email,
                         accessToken
-                  });
+                  }});
             } else {
                   return res.status(400).json({error: 'Data doesnt match'})
             }
