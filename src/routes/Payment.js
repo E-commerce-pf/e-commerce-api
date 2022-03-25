@@ -6,8 +6,9 @@ const sequelize = require("../db");
 const { updateTransaction } = require("../controllers/transaction");
 const { resetUserCart } = require("../controllers/cart");
 const { updateAllStock } = require("../controllers/product");
-//const baseUrl = https://everyones-store-api.herokuapp.com;
-const baseUrl = "http://localhost:3001";
+
+const baseUrl = "https://everyones-store-api.herokuapp.com";
+//const baseUrl = "http://localhost:3001";
 
 paymentRouter.post("/create", async (req, res) => {
   const { description, userId } = req.body;
@@ -63,8 +64,6 @@ paymentRouter.get("/capture/:transactionId/:userId", (req, res) => {
   try {
     const { token, PayerID } = req.query;
     const { transactionId, userId } = req.params;
-
-    console.log(transactionId, userId);
 
     axios
       .post(
