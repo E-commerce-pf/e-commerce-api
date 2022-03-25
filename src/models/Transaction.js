@@ -7,13 +7,14 @@ module.exports = (sequelize) => {
                   defaultValue: DataTypes.UUIDV4,
                   primaryKey: true,
             },
-            product: {
+            cart: {
                   type: DataTypes.JSON,
                   allowNull: false,
             },
-            isSell:{
-                  type: DataTypes.BOOLEAN,
-                  defaultValue: false
+            created_at: {
+            type: DataTypes.DATE,
+            allowNull: true,
+            defaultValue: DataTypes.NOW,
             },
             state:{
                   type: DataTypes.ENUM('process', 'complete', 'canceled'),

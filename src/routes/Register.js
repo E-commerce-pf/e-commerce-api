@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const sequelize = require("../db");
 const User = sequelize.models.User;
+const Cart = sequelize.models.Cart;
 const { encrypt } = require("../controllers/encrypt");
 
 let statusCode=500
@@ -26,7 +27,8 @@ router.post("/", async (req, res) => {
 
     else{
       try {
-        let user = await User.create(req.body);
+        let userCartId=await Cart.create().then(r=>r.dataValues.id);
+        let user = await User.create({...req.body,cartId:userCartId});
         return res.status(201).json({ success: "User created successfuly", user });
       } catch (error) {
         console.log("Error: ", error);
