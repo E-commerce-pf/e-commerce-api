@@ -8,7 +8,8 @@ const getFavorites=async (userId)=>{
         },
         include:[{model:Favorite,include:Product}]
     });
-    return favorites.dataValues.Favorites
+
+    return favorites?favorites.dataValues.Favorites:[]
 }
 
 module.exports = {
