@@ -39,7 +39,7 @@ let capsEntries = entries.map((entry) => [
 sequelize.models = Object.fromEntries(capsEntries);
 console.log(sequelize.models);
 
-const { Product, Category, Review, User, ProductInCart, Cart, Transaction } = sequelize.models;
+const { Product, Favorite, Category, Review, User, ProductInCart, Cart, Transaction } = sequelize.models;
 
 //Relaciones
 Product.belongsToMany(Category, {
@@ -54,6 +54,11 @@ Category.belongsToMany(Product, {
   timestamps: false,
 });
 
+User.hasMany(Favorite);
+Favorite.belongsTo(User);
+
+Product.hasMany(Favorite);
+Favorite.belongsTo(Product);
 
 
 Cart.hasMany(ProductInCart);
