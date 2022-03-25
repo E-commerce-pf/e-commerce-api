@@ -14,6 +14,11 @@ module.exports = (sequelize) => {
         unique: true,
         allowNull: false,
       },
+      disable:{
+        type: DataTypes.BOOLEAN,
+        defaultValue : false,
+        allowNull: true
+      }
     },
     {
       timestamps: false,

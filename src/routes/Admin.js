@@ -205,49 +205,46 @@ router.delete('/user/delete/:id', verifyAdminToken, async (req, res)=>{
     }
 })
 
+//CREAR UNA CATEGORIA NUEVA
 router.post('/categories/create', verifyAdminToken, async (req, res)=>{
-    let {categories} = req.body
+    let { name } = req.body
+    if(!name) return res.status(400).json( {error:'No categories were sent'} );
+
+    const result = await Category.findOne({
+        where:{
+            name
+        }
+    });
+
+    if(result) return res.status(400).json({error: 'Category already exist'});
 
     try{
-        statusCode = 400
-        if(!categories) return new Error('No categories were sent')
-        let existingCategories = await Category.findAll();
-
-        let newCategories = categories.filter(cat=>!existingCategories.includes(cat))
-
-        if(!newCategories) return res.status(200).json({status:'None of the sent categories were new'})
-
-        let success = await Promise.all(newCategories.map(async cat=>await Category.create({name:cat})))
-
-        statusCode = 500
-        if(success) res.status(201).json({status:'Categories created', newCategories})
-        else throw new Error("Unexpected error occurred")
+        const newCategory = await Category.create({name});
+        return res.status(200).json({success:'Created successfuly', newCategory});
     }
     catch(err){
-        return res.status(statusCode).json({error: err.message})
+        return res.status(400).json({error: err.message})
     }
 })
 
-router.delete('/categories/delete', verifyAdminToken, async (req, res)=>{
-    let {categories} = req.body
-
+//ELIMINAR UNA CATEGORIA
+router.delete('/categories/:id', verifyAdminToken, async (req, res)=>{
+    const {id} = req.params
+    console.log(id)
+    
     try{
-        statusCode = 400
-        if(!categories) return new Error('No categories were sent')
-        let existingCategories = await Category.findAll();
-
-        let selectedCategories = categories.filter(cat=>existingCategories.includes(cat))
-
-        if(!selectedCategories) return res.status(200).json({status:'None of the sent categories existed'})
-
-        let success = await Promise.all(selectedCategories.map(async cat=>await Category.destroy({where:{name:cat}})))
-
-        statusCode = 500
-        if(success) res.status(201).json({status:'Categories deleted:', selectedCategories})
-        else throw new Error("Unexpected error occurred")
+        const category = await Category.findOne({
+            where:{
+                id,
+                disable : false
+            }
+        });
+        if(!category) return res.status(400).json({error : 'Category not found'})
+        category.update({disable : true});
+        return res.status(200).json({success : 'Category eliminated'});
     }
     catch(err){
-        return res.status(statusCode).json({error: err.message})
+        return res.status(400).json({error: err.message})
     }
 })
 
