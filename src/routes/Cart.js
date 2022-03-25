@@ -6,7 +6,8 @@ const {
     getCart,
     createProductInCart,
     updateProductInCart,
-    updateCart
+    updateCart,
+    updateProductsInCart
   } = require("../controllers/cart");
 let statusCode=500
 
@@ -44,6 +45,32 @@ router.post('/:productId', async (req, res)=>{
         cart = await getCart(user.cartId);
         let status=existProductInCart?"Cart updated":"Product added";
         return res.status(200).json({status,cart}) 
+    }
+    catch(err){ return res.status(statusCode).json({error: err.message}) }
+});
+
+router.put('/:productId', async (req, res)=>{
+    let {productId}=req.params;
+    let {userId}=req.body;
+    try{
+        //Comprobaciones
+
+        if(productId!=="all"&&!isUUID(productId))
+            return res .status(400).send({error:'id del producto no valida'});
+        if(!isUUID(userId))
+            return res .status(400).send({error:'id del usuario no valida'});
+        let user= await User.findByPk(userId);
+        if(!user)
+            return res.status(404).send({error:'Product not found'});
+        let cart= await getCart(user.cartId);
+        let newProductsInCart=[];
+        if(productId!=="all"){
+            newProductsInCart=cart.ProductInCarts
+            .filter(p=>p.productId!==productId);
+        }
+        await updateProductsInCart(newProductsInCart,cart);
+        cart= await getCart(user.cartId);
+        return res.status(200).json({status:"updated",cart}) 
     }
     catch(err){ return res.status(statusCode).json({error: err.message}) }
 });

@@ -42,6 +42,11 @@ const updateCart= async (totalPrice,cartId)=>
         }
     );
 }
+const updateProductsInCart= async (ProductInCarts,cart)=>
+{    
+    return await cart.setProductInCarts(ProductInCarts);
+}
+
 
 const resetUserCart= async (userId)=>
 {    
@@ -75,5 +80,6 @@ module.exports = {
     createProductInCart,
     updateProductInCart,
     updateCart,
-    resetUserCart
+    resetUserCart,
+    updateProductsInCart
   };
