@@ -1,7 +1,10 @@
 const router = require("express").Router();
 const sequelize = require('../db');
-const { Review, Product} = sequelize.models;
+const { Review, Product, User,Transaction } = sequelize.models;
 const { Op } = require('sequelize');
+const {
+    getUserTransactionsComplete,
+  } = require("./transaction");
 const createReview= async (userId,score,comment)=>
 {    
     try {
@@ -26,7 +29,13 @@ const mostVoted= async (number)=>{
         return prom>=number?true:false;
     });
 }
+const userBuyProduct=async (userId,productId)=>{
+    let transactions=await getUserTransactionsComplete(userId);
+    let productBuyed=transactions.filter(t=>t.cart.productsInCart.find(({product})=>product.id===productId));
+    return productBuyed.length>0;
+}
 module.exports = {
     createReview,
     mostVoted,
+    userBuyProduct
   };
