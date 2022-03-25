@@ -1,6 +1,26 @@
 const sequelize = require("../db");
-const { Product, Category, Review } = sequelize.models;
+const { Product, Category, Review,Transaction } = sequelize.models;
 
+const updateStockProduct=async (product,quantity)=>{
+  Product.update(
+    {
+      stock:product.stock-quantity
+    },
+    {
+      where:{
+        id:product.id
+      }
+    }
+  )
+}
+const updateAllStock=async(transactionId)=>{
+  let productsInCart=await Transaction.findByPk(transactionId).then(r=>r.cart.productsInCart);
+  productsInCart=productsInCart.map(({product,quantity})=>{
+    return updateStockProduct(product,quantity);
+  });
+  console.log(await Promise.all(productsInCart));
+  return 1;
+}
 const createProduct = async (req, res) => {
   const { title, price, stock, description ,categories } = req.body;
 
@@ -40,4 +60,5 @@ const getAllProducts = async () => {
 module.exports = {
   createProduct,
   getAllProducts,
+  updateAllStock
 };
