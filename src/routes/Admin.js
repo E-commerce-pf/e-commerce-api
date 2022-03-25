@@ -15,7 +15,8 @@ router.post('/login', async(req, res)=>{
         result = await User.findOne({
             where:{
                 email,
-                isAdmin : true
+                isAdmin : true,
+                disable : false
             }
         });
     } catch (error) {
@@ -159,46 +160,66 @@ router.put('/transactions/update/:id', verifyAdminToken, async (req, res)=>{
 })
 
 
-router.put('/user/update/:id', verifyAdminToken, async (req, res)=>{
-    let {id} = req.params
-    let validEntries = Object.entries(req.body).filter(([, value]) => value != null).reduce((acc, [key, value])=>({...acc, [key]:value}),{}) 
+//ACTUALIZAR LOS ROLES DE UN USUARIO
+router.put('/user/updateAdmin/:id', verifyAdminToken, async (req, res)=>{
+    let { id } = req.params
+    const result = await User.findOne({
+        where:{
+            id,
+            disable : false
+        }
+    });
+    if(!result) return res.status(400).json({error: 'User not found'});
 
     try{
-        statusCode = 400
-        if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(id)) throw new Error("Invalid ID format")
-        
-        const user = await User.findByPk(id)
+        if(result.dataValues.isAdmin){
+            result.update({isAdmin : false});
+        } else {
+            result.update({isAdmin: true});
+        }
+        return res.status(200).json({success : 'User update successfuly'})
 
-        statusCode = 404
-        if(!user) throw new Error("No user found with given ID")
-    
-        const success = await Promise.all(Object.entries(validEntries).map(async ([key, value])=>await User.update({[key]:value}, {where:{id}})))
-
-        statusCode = 500
-        if(success) return res.status(200).json({status:'User updated', user : await User.findByPk(id)})
-        else throw new Error('Unexpected error ocurred')
-    }
-    catch(err){
+    } catch(err){
         return res.status(statusCode).json({error: err.message})
     }
 })
 
+//FORZAR CAMBIO DE CONTRASEÑA A UN USUARIO
+router.put('/user/forcepassword/:id', async (req, res)=>{
+    const { id } = req.params;
+    const result = await User.findOne({
+        where:{
+            id,
+            disable : false
+        }
+    });
+    
+    if(!result) return res.status(400).json({error : 'User not found'});
 
-router.delete('/user/delete/:id', verifyAdminToken, async (req, res)=>{
+    try {
+        if(result.dataValues.loginWithSocial) return res.status(200).json({success : 'This user does not have a password to force'})
+        result.update({loginWithSocial : true});
+        return res.status(200).json({success: 'The user must change his password'})
+    } catch (error) {
+        return res.status(400).json({error : error.message});
+    }
+});
+
+//BANEAR UN USUARIO
+router.put('/user/delete/:id', verifyAdminToken, async (req, res)=>{
     let {id} = req.params
+    const result = await User.findOne({
+        where:{
+            id,
+            disable : false
+        }
+    });
+
+    if(!result) return res.status(400).json({error : 'User not found'});
 
     try{
-        statusCode = 400
-        if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(id)) throw new Error("Invalid ID format")
-
-        const user = await User.findByPk(id)
-
-        statusCode = 404
-        if(!user) throw new Error("No user found with given ID")
-        else {
-            user.destroy()
-            return res.status(200).json({status:`User '${user.name+' '+user.lastName}' deleted`})
-        }
+        result.update({disable: true});
+        return res.status(200).json({success: 'Banned User'});
     }
     catch(err){
         return res.status(statusCode).json({error: err.message})
@@ -250,7 +271,11 @@ router.delete('/categories/:id', verifyAdminToken, async (req, res)=>{
 
 //TRAER TODOS LOS USUARIOS
 router.get('/users', verifyAdminToken, async(req, res)=>{
-    const result = await User.findAll().then(res => res.map(item => item.dataValues ) );
+    const result = await User.findAll({
+        where:{
+            disable : false
+        }
+    }).then(res => res.map(item => item.dataValues ) );
     res.send(result);
 })
 

@@ -7,6 +7,11 @@ module.exports = (sequelize) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    disable:{
+      type: DataTypes.BOOLEAN,
+      defaultValue : false,
+      allowNull: true
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,

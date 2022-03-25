@@ -18,6 +18,7 @@ router.post('/login', async(req,res) => {
             result = await User.findOne({
                   where:{
                         email,
+                        disable : false
                   }
             });
       } catch (error) {
