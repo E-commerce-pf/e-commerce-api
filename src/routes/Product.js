@@ -1,39 +1,47 @@
 const router = require("express").Router();
 const { createProduct, getAllProducts } = require("../controllers/product");
-const { verifyUserToken, verifyAdminToken } = require("../controllers/verifyToken");
+const {
+  verifyUserToken,
+  verifyAdminToken,
+} = require("../controllers/verifyToken");
 const sequelize = require("../db");
 const { Product, Category, Review } = sequelize.models;
 
-let statusCode = 500
+let statusCode = 500;
 
-router.post("/", verifyAdminToken ,createProduct);
+router.post("/", verifyAdminToken, createProduct);
 
-//Traer todos los productos
-router.get('/', async(req, res)=>{
-  const result = await Product.findAll()
-  .then( res => res.map(item => item.dataValues));
-  res.status(200).json({length : result.length, result});
-})
+router.get("/", async (req, res) => {
+  const result = await Product.findAll();
+
+  res.json(result);
+});
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    if(id==='all'){
+    if (id === "all") {
       const products = await getAllProducts();
-      let totalProducts = Object.keys(products).length
-      statusCode= 404
-      if(totalProducts) return res.status(200).json({total:totalProducts, products});
-      else throw new Error('No products found!')
+      let totalProducts = Object.keys(products).length;
+      statusCode = 404;
+      if (totalProducts)
+        return res.status(200).json({ total: totalProducts, products });
+      else throw new Error("No products found!");
     }
     statusCode = 400;
-    if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(id)) throw new Error('Invalid transaction ID format')
+    if (
+      !/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(
+        id
+      )
+    )
+      throw new Error("Invalid transaction ID format");
 
     const product = await Product.findOne({
       where: {
         id,
       },
-      include: [{ model: Category, attributes: ["name"]},Review],
+      include: [{ model: Category, attributes: ["name"] }, Review],
     });
 
     statusCode = 404;
