@@ -54,7 +54,6 @@ router.put('/:productId', async (req, res)=>{
     let {userId}=req.body;
     try{
         //Comprobaciones
-
         if(productId!=="all"&&!isUUID(productId))
             return res .status(400).send({error:'id del producto no valida'});
         if(!isUUID(userId))
@@ -64,11 +63,17 @@ router.put('/:productId', async (req, res)=>{
             return res.status(404).send({error:'Product not found'});
         let cart= await getCart(user.cartId);
         let newProductsInCart=[];
+        let productRemoved;
         if(productId!=="all"){
             newProductsInCart=cart.ProductInCarts
-            .filter(p=>p.productId!==productId);
+            .filter(p=>{
+                if(p.productId!==productId) return true
+                else productRemoved=p;
+            });
         }
-        await updateProductsInCart(newProductsInCart,cart);
+        let success=await updateProductsInCart(newProductsInCart,cart,productId,productRemoved);
+        if(success.error)
+            return res.status(404).send({error:success.error});
         cart= await getCart(user.cartId);
         return res.status(200).json({status:"updated",cart}) 
     }

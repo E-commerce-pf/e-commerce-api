@@ -1,5 +1,5 @@
 const sequelize = require('../db');
-const { Cart,ProductInCart,User } = sequelize.models;
+const { Cart,ProductInCart,User, Product } = sequelize.models;
 const getCart= async (cartId)=>
 {    
     return await Cart.findOne({
@@ -42,9 +42,20 @@ const updateCart= async (totalPrice,cartId)=>
         }
     );
 }
-const updateProductsInCart= async (ProductInCarts,cart)=>
+const updateProductsInCart= async (ProductInCarts,cart,productId,productRemoved)=>
 {    
-    return await cart.setProductInCarts(ProductInCarts);
+    if(productRemoved){
+        totalPrice=0;
+        if(productId!=="all"){
+            let product= await Product.findByPk(productId);
+            totalPrice=cart.totalPrice-product.price*productRemoved.dataValues.quantity;
+        }
+            
+        await updateCart(totalPrice,cart.id);
+        return await cart.setProductInCarts(ProductInCarts);
+    } else{
+        return {error:"Product in cart not found"}
+    }
 }
 
 
