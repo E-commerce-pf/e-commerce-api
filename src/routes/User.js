@@ -4,6 +4,7 @@ const {decrypt, encrypt} = require('../controllers/encrypt');
 const sequelize = require('../db');
 const { User, Product } = sequelize.models;
 const { verifyUserToken } = require('../controllers/verifyToken');
+const createUser = require('../controllers/createUser');
 
 router.post('/login', async(req,res) => {
       let result;
@@ -22,20 +23,12 @@ router.post('/login', async(req,res) => {
                   }
             });
       } catch (error) {
-            //En el caso de que no haya encontrado el usuario 
             return res.status(400).json({error: error.message});
       }
-      //En el caso de que no haya encontrado el usuario 
+
       if(!result){
-            //Y está iniciando sesion con alguna red social
             if(loginWithSocial){
-                  try {
-                        req.body.password = encrypt(req.body.password)
-                        const newUser = await User.create(req.body)
-                        return res.status(201).json({success: 'New user created', user : newUser})
-                  } catch (error) {
-                        return res.status(400).json({error: 'error'})
-                  }
+                  createUser(res, req.body);
             }
             return res.status(400).json({error: 'User not found'})
       }
@@ -56,10 +49,9 @@ router.post('/login', async(req,res) => {
                   //Creamos el token de acceso
                   const accessToken = jwt.sign({
                         role
-                  },
-                  process.env.JWT_KEY,
-                  { expiresIn : 60 * 60 * 24 }
-                  );
+                  },process.env.JWT_KEY,
+                  { expiresIn : 60 * 60 * 24 });
+
                   return res.status(200).json({ success : 'Login Succes', user :{
                         userId : result.id,
                         name : result.name,
