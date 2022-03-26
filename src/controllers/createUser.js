@@ -15,7 +15,7 @@ const createUser = async ( res, data )=>{
       const result = await User.findOne({
             where: {
             email,
-            disabled : false
+            disable : false
             }
       });
 
