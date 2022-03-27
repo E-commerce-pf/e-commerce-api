@@ -40,4 +40,8 @@ routerReviews.get("/products/score", (req, res) => {
     });
 });
 
+routerReviews.get("/:userId", async (req, res) => {
+  res.json(await Review.findAll({ where: { userId: req.params.userId }, include: Product }));
+});
+
 module.exports = routerReviews;
