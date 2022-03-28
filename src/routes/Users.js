@@ -1,5 +1,5 @@
 const sequelize = require("../db");
-const { User, Cart, ProductInCart, Transaction } = sequelize.models;
+const { User, Cart, ProductInCart, Transaction, Favorite, Product } = sequelize.models;
 const routerUsers = require("express").Router();
 
 routerUsers.get("/", (req, res) => {
@@ -14,7 +14,9 @@ routerUsers.get("/", (req, res) => {
 
 routerUsers.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const user = await User.findByPk(id, { include: [{ model: Transaction }] });
+  const user = await User.findByPk(id, {
+    include: [{ model: Transaction }, { model: Favorite, include: Product }],
+  });
 
   if (user) {
     const cart = await Cart.findByPk(user.cartId, {
