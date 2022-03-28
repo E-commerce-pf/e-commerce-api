@@ -6,10 +6,10 @@ const products = require("./src/data/products");
 const sequelize = require("./src/db");
 const { Product, Category, Review, User } = sequelize.models;
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   server.listen(PORT, async () => {
     console.log(`Server listening on port ${PORT}`);
-    
+    /*
     await Category.bulkCreate(categories);
     await Product.bulkCreate(products);
     for (let i = 0; i < products.length; i++) {
@@ -33,7 +33,8 @@ sequelize.sync({ force: true }).then(() => {
 
       await newProduct.setCategories(findCategory);
     }
-
+  
     console.log("Products and categories pre charged :)");
+    */
   });
 });
