@@ -28,7 +28,7 @@ router.post('/login', async(req,res) => {
 
       if(!result){
             if(loginWithSocial){
-                  createUser(res, req.body);
+                  return createUser(res, req.body);
             }
             return res.status(400).json({error: 'User not found'})
       }
