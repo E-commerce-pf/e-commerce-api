@@ -24,7 +24,12 @@ const createUser = async ( res, data )=>{
       try {
             let userCartId = await Cart.create().then(res => res.dataValues.id);
             let user = await User.create( {...data, cartId : userCartId} );
-            return res.status(201).json( {success: "User created successfuly", user} );
+            return res.status(201).json( {success: "User created successfuly", user : {
+                  userId : user.id,
+                  name : user.name,
+                  lastName : user.lastName,
+                  email : user.email,
+            }} );
 
       } catch ( error ) {
             return res.status( 400 ).json( {error : error.message} );
