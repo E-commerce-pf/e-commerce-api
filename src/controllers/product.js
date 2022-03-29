@@ -1,24 +1,25 @@
 const sequelize = require("../db");
 const { Product, Category, Review,Transaction } = sequelize.models;
 
-const updateStockProduct=async (product,quantity)=>{
+const updateStockProduct = async ( product,quantity )=>{
   Product.update(
     {
-      stock:product.stock-quantity
+      stock: product.stock-quantity
     },
     {
-      where:{
-        id:product.id
+      where: {
+        id: product.id
       }
     }
   )
-}
-const updateAllStock=async(transactionId)=>{
-  let productsInCart=await Transaction.findByPk(transactionId).then(r=>r.cart.productsInCart);
-  productsInCart=productsInCart.map(({product,quantity})=>{
+};
+
+
+const updateAllStock = async ( transactionId )=>{
+  let productsInCart = await Transaction.findByPk( transactionId ).then( r => r.cart.productsInCart );
+  productsInCart = productsInCart.map(( {product,quantity} ) =>{
     return updateStockProduct(product,quantity);
   });
-  console.log(await Promise.all(productsInCart));
   return 1;
 }
 const createProduct = async (req, res) => {
@@ -29,13 +30,11 @@ const createProduct = async (req, res) => {
     const categoriesDB = await Category.findAll({
       where: { name: categories },
     });
-    if (categoriesDB.length === 0)
-      return res
-        .status(400)
-        .json({ errorMessage: "One provided category is not validate" });
 
+    if (categoriesDB.length === 0) return res.status(400).json({ errorMessage: "One provided category is not validate" });  
+
+    req.body.image = req.body.image.join('*_*');
     let newProduct = await Product.create({...req.body});
-
     await newProduct.addCategory(categoriesDB);
 
     const newCategory = categoriesDB.map((category) => category.name);
@@ -46,6 +45,7 @@ const createProduct = async (req, res) => {
     res.status(400).json({ errorMessage: error.message });
   }
 };
+
 
 const getAllProducts = async () => {
   try {
