@@ -12,14 +12,14 @@ let statusCode = 500;
 router.post("/", verifyAdminToken, createProduct);
 
 router.get("/", async (req, res) => {
-  const result = await Product.findAll() .then(res => res.map(item => {
+  const result = await Product.findAll( {include: [Category]} )
+  .then(res => res.map(item => {
     let producto = item.dataValues
     return {
       ...producto,
       image : producto.image.split('*_*')
     }
   }))
-  console.log(result);
   res.json(result);
 });
 

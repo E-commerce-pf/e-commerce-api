@@ -33,7 +33,7 @@ sequelize.sync({ force: false }).then(() => {
 
       await newProduct.setCategories(findCategory);
     }
-
+  
     console.log("Products and categories pre charged :)");
     */
   });
