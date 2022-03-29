@@ -1,5 +1,6 @@
 const sequelize = require("../db");
-const { User, Cart, ProductInCart, Transaction, Favorite, Product } = sequelize.models;
+const { User, Cart, ProductInCart, Transaction, Favorite, Product } =
+  sequelize.models;
 const routerUsers = require("express").Router();
 
 routerUsers.get("/", (req, res) => {
@@ -32,6 +33,18 @@ routerUsers.get("/:id", async (req, res) => {
         error: "No existe el carrito",
       });
     }
+  } else {
+    res.status(404).json({ error: "No existe el usuario" });
+  }
+});
+
+routerUsers.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, lastName, country } = req.body;
+  const user = await User.findByPk(id);
+  if (user) {
+    await user.update({ name, lastName, country });
+    res.json(user);
   } else {
     res.status(404).json({ error: "No existe el usuario" });
   }
