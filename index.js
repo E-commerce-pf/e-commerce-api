@@ -29,6 +29,8 @@ sequelize.sync({ force: true }).then(() => {
           image: products[i].image,
           description: products[i].description,
           stock: products[i].stock,
+          sales: products[i].sales || 0,
+          discount: products[i].discount || 0,
         },
       });
 

@@ -13,6 +13,7 @@ const products = [
       "https://c1.neweggimages.com/ProductImageCompressAll1280/14-137-719-S05.jpg",
     ],
     stock: 13,
+    sales: 342,
     categories: ["computing"],
   },
   {
@@ -28,6 +29,8 @@ const products = [
       "https://c1.neweggimages.com/ProductImageCompressAll1280/24-012-015-07.jpg",
     ],
     stock: 26,
+    sales: 120,
+    discount: 0.2,
     categories: ["computing"],
   },
   {
@@ -43,6 +46,7 @@ const products = [
       "https://c1.neweggimages.com/ProductImageCompressAll1280/B1MBS2111150R80QU72.jpg",
     ],
     stock: 56,
+    sales: 452,
     categories: ["computing"],
   },
   {
@@ -58,6 +62,8 @@ const products = [
       "https://c1.neweggimages.com/ProductImageCompressAll1280/13-119-311-V02.jpg ",
     ],
     stock: 67,
+    sales: 330,
+    discount: 0.15,
     categories: ["computing"],
   },
   {
@@ -74,7 +80,86 @@ const products = [
       "https://c1.neweggimages.com/ProductImageCompressAll1280/17-139-272-V02.jpg",
     ],
     stock: 120,
+    sales: 1230,
     categories: ["computing"],
+  },
+  {
+    title: "Elden Ring - PlayStation 5",
+    price: 60,
+    description:
+      "Journey through the Lands Between, a new fantasy world created by Hidetaka Miyazaki, creator of the influential DARK SOULS video game series, and George R. R. Martin, author of The New York Times best-selling fantasy series, A Song of Ice and Fire.\nELDEN RING features vast fantastical landscapes and shadowy, complex dungeons that are connected seamlessly. Traverse the breathtaking world on foot or on horseback, alone or online with other players, and fully immerse yourself in the grassy plains, ...",
+    image: [
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-253-247-S14.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-253-247-S02.jpg ",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-253-247-S03.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-253-247-S04.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-253-247-S12.jpg",
+    ],
+    stock: 105,
+    sales: 223,
+    categories: ["video games"],
+  },
+  {
+    title: "Horizon Forbidden West - Launch Edition - PlayStation 4",
+    price: 60,
+    description:
+      "An epic Action/RPG Adventure:\nBrave an expansive open world - discover distant lands, new enemies, rich cultures and striking characters.\nA majestic frontier - explore the lush forests, sunken cities and towering mountains of a far-future America.\nConfront new dangers - engage in strategic battles against enormous machines and mounted human enemies by using weapons, gear and traps crafted from salvaged parts.\nUnravel startling mysteries - uncover the secret behind Earth's imminent collapse and u...",
+    image: [
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-261-930-V07.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-261-930-V01.jpg ",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-261-930-V02.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-261-930-V03.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-261-930-V04.jpg",
+    ],
+    stock: 95,
+    sales: 302,
+    categories: ["video games"],
+  },
+  {
+    title: "Resident Evil Village - PS5 Video Games",
+    price: 54,
+    description:
+      "All new Resident Evil experience - picking up where Resident Evil 7 biohazard left Off, Resident Evil village is the eighth major installment in the flagship Resident Evil series\nNext generation Technology - Re engine paired with next-gen Console power will deliver photorealistic graphics, bringing the shadowy village and its haunting residents to life.\nFirst-person action - players will assume the role of Ethan winters and experience every up-close battle and terrifying pursuit through a first-...",
+    image: [
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/79-233-156-01.jpg",
+    ],
+    stock: 86,
+    sales: 523,
+    discount: 0.15,
+    categories: ["video games"],
+  },
+  {
+    title: "Far Cry 6 Standard Edition - Xbox One, Xbox Series X|S",
+    price: 60,
+    description:
+      "Pre-order now to get a deadly Discos Locos weapon and an outfit for Chorizo\nJoin the revolution as you play as Dani Rojas, a local Yaran, and become a guerrilla fighter to liberate your nation\nFight against Anton's troops in the largest Far Cry playground to date across jungles, beaches, and Esperanza, the capital city of Yara\nEmploy makeshift weapons, vehicles, and animal companions to burn Anton's ruthless regime to the ground",
+    image: [
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/74-170-347-V01.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/74-170-347-V02.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/74-170-347-V03.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/74-170-347-V05.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/74-170-347-V06.jpg",
+    ],
+    stock: 93,
+    sales: 209,
+    categories: ["video games"],
+  },
+  {
+    title: "Lego Star Wars: Skywalker Saga - Nintendo Switch",
+    price: 60,
+    description:
+      "The galaxy is yours with LEGO® Star Wars: The Skywalker Saga!\nPlay through all nine Star Wars saga films in a brand-new LEGO video game unlike any other.\nExperience fun-filled adventures, whimsical humor, and the freedom to fully immerse yourself in the LEGO Star Wars universe like never before.",
+    image: [
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/78-330-200-12.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/78-330-200-01.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/78-330-200-02.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/78-330-200-03.jpg",
+      "https://c1.neweggimages.com/ProductImageCompressAll1280/78-330-200-05.jpg",
+    ],
+    stock: 135,
+    sales: 190,
+    discount: 0.25,
+    categories: ["video games"],
   },
 ];
 
