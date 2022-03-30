@@ -5,7 +5,7 @@ const categories = require("./src/data/categories");
 const products = require("./src/data/products");
 const users = require("./src/data/users");
 const sequelize = require("./src/db");
-const { encrypt } = require("./encrypt");
+const { encrypt } = require("./src/controllers/encrypt");
 const { Product, Category, Review, User, Cart } = sequelize.models;
 
 sequelize.sync({ force: true }).then(() => {
@@ -38,6 +38,7 @@ sequelize.sync({ force: true }).then(() => {
     }
 
     for (let i = 0; i < products.length; i++) {
+      products[i].image = products[i].image.join("*_*");
       const findCategory = await Category.findAll({
         where: {
           name: products[i].categories,
