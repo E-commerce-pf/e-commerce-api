@@ -13,29 +13,6 @@ sequelize.sync({ force: true }).then(() => {
     console.log(`Server listening on port ${PORT}`);
 
     await Category.bulkCreate(categories);
-    await Product.bulkCreate(products);
-    await User.bulkCreate(users);
-
-    for (let index = 0; index < users; index++) {
-      users[i].password = encrypt(users[i].password);
-      // const password =  encrypt( users[i].password);
-
-      const userCartId = await Cart.create().then(
-        ({ dataValues }) => dataValues.id
-      );
-
-      await User.findOrCreate({
-        where: {
-          cartId: userCartId,
-          name: users[i].name,
-          lastName: users[i].lastName,
-          email: users[i].email,
-          password: users[i].password,
-          country: users[i].country,
-          isAdmin: users[i].isAdmin || false,
-        },
-      });
-    }
 
     for (let i = 0; i < products.length; i++) {
       products[i].image = products[i].image.join("*_*");
@@ -58,6 +35,25 @@ sequelize.sync({ force: true }).then(() => {
       await newProduct.setCategories(findCategory);
     }
 
+    for (let i = 0; i < users.length; i++) {
+      users[i].password = encrypt(users[i].password);
+
+      const userCartId = await Cart.create().then(
+        ({ dataValues }) => dataValues.id
+      );
+
+      await User.findOrCreate({
+        where: {
+          cartId: userCartId,
+          name: users[i].name,
+          lastName: users[i].lastName,
+          email: users[i].email,
+          password: users[i].password,
+          country: users[i].country,
+          isAdmin: users[i].isAdmin || false,
+        },
+      });
+    }
     console.log("Products, users, admins and categories pre charged :)");
   });
 });
