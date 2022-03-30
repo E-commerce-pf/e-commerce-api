@@ -3,15 +3,40 @@ require("dotenv").config();
 const { PORT } = process.env;
 const categories = require("./src/data/categories");
 const products = require("./src/data/products");
+const users = require("./src/data/users");
 const sequelize = require("./src/db");
-const { Product, Category, Review, User } = sequelize.models;
+const { encrypt } = require("./encrypt");
+const { Product, Category, Review, User, Cart } = sequelize.models;
 
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: true }).then(() => {
   server.listen(PORT, async () => {
     console.log(`Server listening on port ${PORT}`);
-    /*
+
     await Category.bulkCreate(categories);
     await Product.bulkCreate(products);
+    await User.bulkCreate(users);
+
+    for (let index = 0; index < users; index++) {
+      users[i].password = encrypt(users[i].password);
+      // const password =  encrypt( users[i].password);
+
+      const userCartId = await Cart.create().then(
+        ({ dataValues }) => dataValues.id
+      );
+
+      await User.findOrCreate({
+        where: {
+          cartId: userCartId,
+          name: users[i].name,
+          lastName: users[i].lastName,
+          email: users[i].email,
+          password: users[i].password,
+          country: users[i].country,
+          isAdmin: users[i].isAdmin || false,
+        },
+      });
+    }
+
     for (let i = 0; i < products.length; i++) {
       const findCategory = await Category.findAll({
         where: {
@@ -26,15 +51,12 @@ sequelize.sync({ force: false }).then(() => {
           image: products[i].image,
           description: products[i].description,
           stock: products[i].stock,
-          sales: products[i].sales,
-          discount: products[i].discount,
         },
       });
 
       await newProduct.setCategories(findCategory);
     }
-  
-    console.log("Products and categories pre charged :)");
-    */
+
+    console.log("Products, users, admins and categories pre charged :)");
   });
 });
