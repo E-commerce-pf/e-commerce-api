@@ -41,19 +41,13 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    postedProducts: {
-      type: DataTypes.ARRAY(DataTypes.STRING), // Acá se guardan los id de los productos posteados por el usuario
-      allowNull: true,
-    },
+
     cartId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
-    history: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
-    },
+
     phone: {
       type: DataTypes.INTEGER,
       unique: true,
