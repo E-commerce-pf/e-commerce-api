@@ -40,10 +40,9 @@ routerUsers.get("/:id", async (req, res) => {
 
 routerUsers.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, lastName, country } = req.body;
   const user = await User.findByPk(id);
   if (user) {
-    await user.update({ name, lastName, country });
+    await user.update({ ...req.body });
     res.json(user);
   } else {
     res.status(404).json({ error: "No existe el usuario" });
