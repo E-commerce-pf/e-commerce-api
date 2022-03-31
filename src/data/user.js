@@ -5,6 +5,9 @@ const users = [
     email: "brayanalexanderb@gmail.com",
     password: "123456",
     country: "Colombia",
+    phone: "+573058904094",
+    address: "Random en Bogota",
+    city: "Bogota",
   },
   {
     email: "admin@everyones.com",
@@ -13,6 +16,9 @@ const users = [
     lastName: "admin123",
     isAdmin: true,
     country: "Colombia",
+    phone: "+573058904094",
+    address: "Random en Bogota",
+    city: "Bogota",
   },
 ];
 
