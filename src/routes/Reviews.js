@@ -41,7 +41,41 @@ routerReviews.get("/products/score", (req, res) => {
 });
 
 routerReviews.get("/:userId", async (req, res) => {
-  res.json(await Review.findAll({ where: { userId: req.params.userId }, include: Product }));
+  res.json(
+    await Review.findAll({
+      where: { userId: req.params.userId },
+      include: Product,
+    })
+  );
+});
+
+routerReviews.post("/", async (req, res) => {
+  const { score, comment, ProductId, userId } = req.body;
+
+  const review = await Review.findOne({
+    where: {
+      userId,
+      ProductId,
+    },
+  });
+
+  if (review) {
+    await review.update({ score, comment });
+    res.json(review);
+  } else {
+    const newReview = await Review.create({
+      score,
+      comment,
+      userId,
+      ProductId,
+    });
+
+    res.json(newReview);
+  }
+});
+
+routerReviews.get("/", async (req, res) => {
+  res.json(await Review.findAll());
 });
 
 module.exports = routerReviews;
