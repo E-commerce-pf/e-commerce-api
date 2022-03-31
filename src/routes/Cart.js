@@ -51,7 +51,7 @@ router.post('/:productId', async (req, res)=>{
 
 router.put('/:productId', async (req, res)=>{
     let {productId}=req.params;
-    let {userId}=req.body;
+    let {userId,quantity}=req.body;
     try{
         //Comprobaciones
         if(productId!=="all"&&!isUUID(productId))
@@ -63,15 +63,27 @@ router.put('/:productId', async (req, res)=>{
             return res.status(404).send({error:'Product not found'});
         let cart= await getCart(user.cartId);
         let newProductsInCart=[];
-        let productRemoved;
+        let productRemoved="all";
         if(productId!=="all"){
-            newProductsInCart=cart.ProductInCarts
-            .filter(p=>{
-                if(p.productId!==productId) return true
-                else productRemoved=p;
-            });
+            if(!quantity){
+                newProductsInCart=cart.ProductInCarts
+                .filter(p=>{
+                    if(p.productId!==productId) return true
+                    else productRemoved=p;
+                });
+            } else {
+                newProductsInCart=cart.ProductInCarts
+                .map(p=>{
+                    if(p.productId!==productId) return p
+                    else {
+                        p.dataValues.quantity=p.dataValues.quantity-quantity;
+                        productRemoved=p;
+                        return productRemoved;
+                    }
+                });
+            }
         }
-        let success=await updateProductsInCart(newProductsInCart,cart,productId,productRemoved);
+        let success=await updateProductsInCart(newProductsInCart,cart,productId,productRemoved,quantity);
         if(success.error)
             return res.status(404).send({error:success.error});
         cart= await getCart(user.cartId);
@@ -92,7 +104,7 @@ router.get("/:userId", async (req, res) => {
           },
           include: ProductInCart
       })
-        return res.status(200).send({status:"Successfully updated transaction", cart});
+        return res.status(200).send({status:"Successfully obtained car", cart});
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({error:error.message});
