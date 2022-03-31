@@ -13,7 +13,6 @@ router.post("/", verifyAdminToken, createProduct);
 
 router.get("/", async (req, res) => {
   const result = await Product.findAll({ include: [Category] });
-
   res.json(result);
 });
 

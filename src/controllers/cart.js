@@ -18,7 +18,7 @@ const createProductInCart= async (quantity,productId)=>
 }
 const updateProductInCart= async (quantity,productInCartId)=>
 {    
-    return await ProductInCart.update(
+    await ProductInCart.update(
         {
         quantity,
         },
@@ -28,6 +28,10 @@ const updateProductInCart= async (quantity,productInCartId)=>
         },
         }
     );
+    let productInCart= await ProductInCart.findByPk(productInCartId);
+    if(productInCart.quantity===0)
+    ProductInCart.destroy({where:{id:productInCartId}});
+    return 1
 }
 const updateCart= async (totalPrice,cartId)=>
 {    
@@ -42,15 +46,22 @@ const updateCart= async (totalPrice,cartId)=>
         }
     );
 }
-const updateProductsInCart= async (ProductInCarts,cart,productId,productRemoved)=>
-{    
-    if(productRemoved){
+const updateProductsInCart= async (ProductInCarts,cart,productId,productRemoved,quantity)=>
+{   
+    if(productRemoved||productRemoved==="all"){
         totalPrice=0;
         if(productId!=="all"){
             let product= await Product.findByPk(productId);
-            totalPrice=cart.totalPrice-product.price*productRemoved.dataValues.quantity;
+            if(!quantity){
+                totalPrice=cart.totalPrice-product.price*productRemoved.dataValues.quantity;
+            } else {
+                totalPrice=cart.totalPrice-product.price*quantity;
+                if(productRemoved.dataValues.quantity>=0){
+                    await updateCart(totalPrice,cart.id);
+                    return await updateProductInCart(productRemoved.dataValues.quantity,productRemoved.dataValues.id);
+                } else return {error:"Quantity not be negative"}
+            }
         }
-            
         await updateCart(totalPrice,cart.id);
         return await cart.setProductInCarts(ProductInCarts);
     } else{
