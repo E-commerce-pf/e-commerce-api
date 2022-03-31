@@ -31,7 +31,7 @@ const createProduct = async (req, res) => {
       where: { name: categories },
     });
 
-    if (categoriesDB.length === 0) return res.status(400).json({ errorMessage: "One provided category is not validate" });  
+    if (categoriesDB.length === 0) return res.status(400).json({ error: "One provided category is not validate" });  
 
     req.body.image = req.body.image.join('*_*');
     let newProduct = await Product.create({...req.body});
@@ -42,7 +42,7 @@ const createProduct = async (req, res) => {
 
     return res.status(200).json({success : 'A new product created successfuly'});
   } catch (error) {
-    res.status(400).json({ errorMessage: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -53,7 +53,7 @@ const getAllProducts = async () => {
       include: [{ model: Category, attributes: ["name"] }, Review],
     });
   } catch (error) {
-    return error.message;
+    return res.status(400).json({error : error.message})
   }
 };
 

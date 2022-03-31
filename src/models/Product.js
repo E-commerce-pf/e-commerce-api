@@ -49,8 +49,13 @@ const Product = (sequelize) => {
           isNumeric: true,
           min: 0,
           max: 1,
-        },
+        }
       },
+      disable: {
+        type: DataTypes.BOOLEAN,
+        defaultValue : false,
+        allowNull: true
+      }
     },
     {
       timestamps: false,
