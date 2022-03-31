@@ -90,7 +90,7 @@ router.put('/product/update/:id', verifyAdminToken, async (req, res)=>{
     catch(err){ return res.status(statusCode).json({error:err.message}) }
 })
 
-
+//ELIMINAR UN PRODUCTO
 router.delete('/product/:id', verifyAdminToken, async (req, res)=>{
     let {id} = req.params
 
@@ -98,16 +98,22 @@ router.delete('/product/:id', verifyAdminToken, async (req, res)=>{
         statusCode = 400
         if(!uuid.test(id)) throw new Error('Invalid product ID format')
 
-        const product = await Product.findByPk(id)
+        const product = await Product.findOne({
+            where:{
+                id,
+                disable : false
+            }
+        });
 
         statusCode = 404
-        if(!product) throw new Error('No product matches given ID')
-        else {
-            product.destroy() 
-            return res.status(200).json({success:`Product '${product.title}' deleted`})
-        }
+        if(!product) return res.status(400).json({error :'No product matches given ID'})
+
+        product.update( {disable:true} ) 
+        return res.status(200).json({success:`Product '${product.title}' deleted`})
     }
-    catch(err){ return res.status(statusCode).json({error:err.message}) }
+    catch(err){ 
+        return res.status(statusCode).json({error:err.message}) 
+    }
 })
 
 
