@@ -7,19 +7,19 @@ module.exports = (sequelize) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    disable:{
+    disable: {
       type: DataTypes.BOOLEAN,
-      defaultValue : false,
-      allowNull: true
+      defaultValue: false,
+      allowNull: true,
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    loginWithSocial:{
+    loginWithSocial: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
-      allowNull: true
+      allowNull: true,
     },
     lastName: {
       type: DataTypes.STRING,
@@ -33,27 +33,33 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    isAdmin:{
-      type : DataTypes.BOOLEAN,
-      defaultValue: false
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     country: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
     },
-    postedProducts: {
-      type: DataTypes.ARRAY(DataTypes.STRING), // Acá se guardan los id de los productos posteados por el usuario
-      allowNull: true
-    },
-    cartId:{
+
+    cartId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+      allowNull: false,
     },
-    history:{
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true
 
-    }
+    phone: {
+      type: DataTypes.INTEGER,
+      unique: true,
+      defaultValue: null,
+    },
+    address: {
+      type: DataTypes.TEXT,
+      defaultValue: null,
+    },
+    city: {
+      type: DataTypes.STRING,
+      defaultValue: null,
+    },
   });
 };
