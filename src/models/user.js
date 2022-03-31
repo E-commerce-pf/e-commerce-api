@@ -51,15 +51,15 @@ module.exports = (sequelize) => {
     phone: {
       type: DataTypes.STRING,
       unique: true,
-      defaultValue: null,
+      defaultValue: "",
     },
     address: {
       type: DataTypes.TEXT,
-      defaultValue: null,
+      defaultValue: "",
     },
     city: {
       type: DataTypes.STRING,
-      defaultValue: null,
+      defaultValue: "",
     },
   });
 };
