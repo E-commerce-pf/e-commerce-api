@@ -11,52 +11,54 @@ const { Product, Category, User, Cart } = sequelize.models;
 sequelize.sync({ force: false }).then(() => {
   server.listen(PORT, async () => {
     console.log(`Server listening on port ${PORT}`);
-    /*
-    await Category.bulkCreate(categories);
 
-    for (let i = 0; i < products.length; i++) {
-      products[i].image = products[i].image.join("*_*");
-      const findCategory = await Category.findAll({
-        where: {
-          name: products[i].categories,
-        },
-      });
+    //   await Category.bulkCreate(categories);
 
-      const [newProduct] = await Product.findOrCreate({
-        where: {
-          title: products[i].title,
-          price: products[i].price,
-          image: products[i].image,
-          description: products[i].description,
-          stock: products[i].stock,
-          sales: products[i].sales || 0,
-          discount: products[i].discount || 0,
-        },
-      });
+    //   for (let i = 0; i < products.length; i++) {
+    //     products[i].image = products[i].image.join("*_*");
+    //     const findCategory = await Category.findAll({
+    //       where: {
+    //         name: products[i].categories,
+    //       },
+    //     });
 
-      await newProduct.setCategories(findCategory);
-    }
+    //     const [newProduct] = await Product.findOrCreate({
+    //       where: {
+    //         title: products[i].title,
+    //         price: products[i].price,
+    //         image: products[i].image,
+    //         description: products[i].description,
+    //         stock: products[i].stock,
+    //         sales: products[i].sales || 0,
+    //         discount: products[i].discount || 0,
+    //       },
+    //     });
 
-    for (let i = 0; i < users.length; i++) {
-      users[i].password = encrypt(users[i].password);
+    //     await newProduct.setCategories(findCategory);
+    //   }
 
-      const userCartId = await Cart.create().then(
-        ({ dataValues }) => dataValues.id
-      );
+    //   for (let i = 0; i < users.length; i++) {
+    //     users[i].password = encrypt(users[i].password);
 
-      await User.findOrCreate({
-        where: {
-          cartId: userCartId,
-          name: users[i].name,
-          lastName: users[i].lastName,
-          email: users[i].email,
-          password: users[i].password,
-          country: users[i].country,
-          isAdmin: users[i].isAdmin || false,
-        },
-      });
-    }
-    console.log("Products, users, admins and categories pre charged :)");
-    */
+    //     const userCartId = await Cart.create().then(
+    //       ({ dataValues }) => dataValues.id
+    //     );
+
+    //     await User.findOrCreate({
+    //       where: {
+    //         cartId: userCartId,
+    //         name: users[i].name,
+    //         lastName: users[i].lastName,
+    //         email: users[i].email,
+    //         password: users[i].password,
+    //         country: users[i].country,
+    //         isAdmin: users[i].isAdmin || false,
+    //         phone: users[i].phone || "",
+    //         address: users[i].address || "",
+    //         city: users[i].city || "",
+    //       },
+    //     });
+    //   }
+    //   console.log("Products, users, admins and categories pre charged :)");
   });
 });
