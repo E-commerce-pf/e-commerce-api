@@ -7,7 +7,12 @@ const { createProduct } = require("../controllers/product");
 router.post("/", verifyAdminToken, createProduct);
 
 router.get("/", async (req, res) => {
-  const result = await Product.findAll({ include: [Category] }).then((res) =>
+  const result = await Product.findAll( {
+    where: {
+      disable: false
+    }}, 
+    { include: [Category] }
+    ).then((res) =>
     res.map((item) => {
       let producto = item.dataValues;
       return {
