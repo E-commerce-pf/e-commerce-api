@@ -10,17 +10,18 @@ router.post("/", verifyAdminToken, createProduct);
 //TRAER TODOS LOS PRODUCTOS
 router.get("/", async (req, res) => {
   const result = await Product.findAll({
+    include : [Category],
     where:{
       disable: false
-    }},
-    {include: [Category]} 
-  ) .then(res => res.map(item => {
+    }
+  }) .then(res => res.map(item => {
     let producto = item.dataValues
     return {
       ...producto,
       image : producto.image.split('*_*')
     }
   }))
+  console.log(result)
   res.json(result);
 });
 
