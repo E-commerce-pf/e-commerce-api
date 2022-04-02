@@ -92,16 +92,14 @@ router.put('/product/update/:id', verifyAdminToken, async (req, res)=>{
 
 //ELIMINAR UN PRODUCTO
 router.delete('/product/:id', verifyAdminToken, async (req, res)=>{
-    let {id} = req.params
-
+    const {id} = req.params
     try{
         statusCode = 400
         if(!uuid.test(id)) throw new Error('Invalid product ID format')
 
         const product = await Product.findOne({
             where:{
-                id,
-                disable : false
+                id
             }
         });
 
