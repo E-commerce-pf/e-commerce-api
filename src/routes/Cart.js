@@ -28,16 +28,16 @@ router.post('/:productId', async (req, res)=>{
 
         let user= await User.findByPk(userId);
         if(!user)
-        return res.status(404).send({error:'Product not found'});
+        return res.status(404).send({error:'User not found'});
 
 
         let cart= await getCart(user.cartId);
         let productInCart=await createProductInCart(quantity,productId);
-        let totalPrice=cart.totalPrice+quantity*product.price;
+        let totalPrice=cart.totalPrice+quantity*product.price-quantity*product.price*product.discount;
         let existProductInCart=cart.ProductInCarts.find((product)=>product.productId===productId);
         if(existProductInCart){
             await updateProductInCart(quantity,existProductInCart.id);
-            totalPrice-=existProductInCart.quantity*product.price; 
+            totalPrice-=existProductInCart.quantity*product.price-existProductInCart.quantity*product.price*product.discount; 
         } else {
             await cart.addProductInCart(productInCart);
         }
@@ -60,7 +60,7 @@ router.put('/:productId', async (req, res)=>{
             return res .status(400).send({error:'id del usuario no valida'});
         let user= await User.findByPk(userId);
         if(!user)
-            return res.status(404).send({error:'Product not found'});
+            return res.status(404).send({error:'User not found'});
         let cart= await getCart(user.cartId);
         let newProductsInCart=[];
         let productRemoved="all";

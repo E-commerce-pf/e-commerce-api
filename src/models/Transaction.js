@@ -7,6 +7,10 @@ module.exports = (sequelize) => {
                   defaultValue: DataTypes.UUIDV4,
                   primaryKey: true,
             },
+            token: {
+                  type: DataTypes.TEXT,
+                  allowNull: true,
+            },
             cart: {
                   type: DataTypes.JSON,
                   allowNull: false,

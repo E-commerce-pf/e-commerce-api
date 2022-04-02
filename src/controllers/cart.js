@@ -53,9 +53,9 @@ const updateProductsInCart= async (ProductInCarts,cart,productId,productRemoved,
         if(productId!=="all"){
             let product= await Product.findByPk(productId);
             if(!quantity){
-                totalPrice=cart.totalPrice-product.price*productRemoved.dataValues.quantity;
+                totalPrice=cart.totalPrice-(product.price*productRemoved.dataValues.quantity-product.price*productRemoved.dataValues.quantity*productRemoved.dataValues.discount);
             } else {
-                totalPrice=cart.totalPrice-product.price*quantity;
+                totalPrice=cart.totalPrice-(product.price*quantity-product.price*quantity*product.discount);
                 if(productRemoved.dataValues.quantity>=0){
                     await updateCart(totalPrice,cart.id);
                     return await updateProductInCart(productRemoved.dataValues.quantity,productRemoved.dataValues.id);
