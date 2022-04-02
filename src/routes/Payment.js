@@ -9,8 +9,8 @@ const { resetUserCart } = require("../controllers/cart");
 const { updateAllStock } = require("../controllers/product");
 const cancelTemplate = require("../utils/templateCancelPayment");
 
-//const baseUrl = "https://everyones-store-api.herokuapp.com";
-const baseUrl = "http://localhost:3001";
+const baseUrl = "https://everyones-store-api.herokuapp.com";
+//const baseUrl = "http://localhost:3001";
 
 paymentRouter.post("/create", async (req, res) => {
   const { description, userId } = req.body;

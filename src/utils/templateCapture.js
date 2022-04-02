@@ -46,6 +46,7 @@ function Capture(success) {
           <button>
             <a href="https://respaldo-everyones-store.vercel.app/">Volver a Everyones Store</a>
           </button>
+          <p>The administrator will check that everything is correct and will accept your order, meanwhile, the money has not been deducted from your account.</p>
         </div>
       </body>
     </html>
