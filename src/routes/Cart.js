@@ -26,17 +26,18 @@ router.post('/:productId', async (req, res)=>{
         if( quantity>product.stock )
         return res.status(404).send({error:'Quantity must not be greater than the stock of the product'});
 
-        let user = await User.findByPk(userId);
-        if(!user) return res.status(404).send({error:'User not found'});
+        let user= await User.findByPk(userId);
+        if(!user)
+        return res.status(404).send({error:'User not found'});
 
 
-        let cart = await getCart(user.cartId);
-        let productInCart = await createProductInCart( quantity,productId );
-        let totalPrice = cart.totalPrice + quantity * product.price;
-        let existProductInCart = cart.ProductInCarts.find( (product) => product.productId === productId);
+        let cart= await getCart(user.cartId);
+        let productInCart=await createProductInCart(quantity,productId);
+        let totalPrice=cart.totalPrice+quantity*product.price-quantity*product.price*product.discount;
+        let existProductInCart=cart.ProductInCarts.find((product)=>product.productId===productId);
         if(existProductInCart){
-            await updateProductInCart( quantity,existProductInCart.id );
-            totalPrice -= existProductInCart.quantity * product.price; 
+            await updateProductInCart(quantity,existProductInCart.id);
+            totalPrice-=existProductInCart.quantity*product.price-existProductInCart.quantity*product.price*product.discount; 
         } else {
             await cart.addProductInCart( productInCart );
         }
@@ -53,14 +54,14 @@ router.put('/:productId', async (req, res)=>{
     let {userId,quantity}=req.body;
     try{
         //Comprobaciones
-        if(productId !== "all" && !isUUID(productId)) return res .status(400).send({error:'id del producto no valida'});
-
-        if(!isUUID(userId)) return res.status(400).send({error:'id del usuario no valida'});
-
-        let user = await User.findByPk(userId);
-        if(!user) return res.status(404).send({error:'User not found'});
-
-        let cart = await getCart(user.cartId);
+        if(productId!=="all"&&!isUUID(productId))
+            return res .status(400).send({error:'id del producto no valida'});
+        if(!isUUID(userId))
+            return res .status(400).send({error:'id del usuario no valida'});
+        let user= await User.findByPk(userId);
+        if(!user)
+            return res.status(404).send({error:'User not found'});
+        let cart= await getCart(user.cartId);
         let newProductsInCart=[];
         let productRemoved="all";
         if(productId!=="all"){

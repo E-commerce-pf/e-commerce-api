@@ -29,8 +29,18 @@ const getUserTransactionsComplete=async (userId)=>{
   });
   return user?user.Transactions:[];
 }
+const saveTokenBuy=async (token,transactionId)=>{
+  return await Transaction.update({
+    token
+  },{
+    where:{
+      id:transactionId
+    }
+  });
+}
 module.exports = {
     createTransaction,
     updateTransaction,
-    getUserTransactionsComplete
+    getUserTransactionsComplete,
+    saveTokenBuy,
   };
