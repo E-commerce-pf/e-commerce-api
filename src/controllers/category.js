@@ -12,7 +12,7 @@ const getAllCategories = async () => {
     }) 
     .then(res => {
       res.map(item => {
-        result.push({id :item.dataValues.id, name : item.dataValues.name, products: item.dataValues.Products.length})
+        result.push({id :item.dataValues.id, name : item.dataValues.name, image: item.dataValues.image, products: item.dataValues.Products.length})
       })
     })
     return result 
