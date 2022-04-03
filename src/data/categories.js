@@ -5,8 +5,7 @@ const categories = [
   },
   {
     name: "computing",
-    image:
-      "https://cdn-icons.flaticon.com/png/512/1865/premium/1865273.png?token=exp=1648950341~hmac=4134e6b2b5c3c1aa5ee27951e465a6e3",
+    image: "https://cdn-icons-png.flaticon.com/512/2292/2292038.png",
   },
   {
     name: "cameras",
@@ -18,8 +17,7 @@ const categories = [
   },
   {
     name: "audio",
-    image:
-      "https://cdn-icons.flaticon.com/png/512/3604/premium/3604401.png?token=exp=1648950771~hmac=557e9620b5f3722a556b1010807fcac6",
+    image: "https://cdn-icons-png.flaticon.com/512/3208/3208768.png",
   },
   {
     name: "consoles",
@@ -31,8 +29,7 @@ const categories = [
   },
   {
     name: "other",
-    image:
-      "https://cdn-icons.flaticon.com/png/512/3357/premium/3357334.png?token=exp=1648951066~hmac=00cfc4a78410fc4da379a4848615397a",
+    image: "https://cdn-icons-png.flaticon.com/512/126/126795.png",
   },
 ];
 
