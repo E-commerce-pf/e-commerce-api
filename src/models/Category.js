@@ -14,9 +14,14 @@ module.exports = (sequelize) => {
         unique: true,
         allowNull: false,
       },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "https://cdn-icons-png.flaticon.com/512/6693/6693080.png",
+      },
       disable:{
         type: DataTypes.BOOLEAN,
-        defaultValue : false,
+        defaultValue : false, 
         allowNull: true
       }
     },
