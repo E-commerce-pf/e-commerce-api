@@ -21,7 +21,6 @@ router.get("/", async (req, res) => {
       image : producto.image.split('*_*')
     }
   }))
-  console.log(result)
   res.json(result);
 });
 

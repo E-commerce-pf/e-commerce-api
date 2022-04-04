@@ -28,6 +28,7 @@ paymentRouter.post("/create", async (req, res) => {
     }
     const { id } = transactionDetail.data.transaction;
     const { totalPrice } = transactionDetail.data.transaction.cart;
+    console.log(totalPrice)
     const order = {
       intent: "CAPTURE",
       purchase_units: [
@@ -49,7 +50,6 @@ paymentRouter.post("/create", async (req, res) => {
       },
     };
     
-  
     axios
       .post(`${PAYPAL_API}/v2/checkout/orders`, order, {
         auth: {
@@ -57,9 +57,9 @@ paymentRouter.post("/create", async (req, res) => {
           password: PAYPAL_API_SECRET,
         },
       })
-      .then((resp) => res.json(resp.data));
+      .then((resp) => res.json(resp.data))
+      .catch((e)=>console.log(PAYPAL_API_CLIENT))
   } catch ({message}) {
-    console.log(message)
     return res.status(500).json({ error: message });
   }
 });

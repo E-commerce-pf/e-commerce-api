@@ -57,7 +57,11 @@ router.post('/login', async(req,res) => {
                         name : result.name,
                         lastName : result.lastName,
                         email : result.email,
-                        accessToken
+                        accessToken,
+                        phone: result.phone,
+                        country: result.country,
+                        city: result.city,
+                        address: result.address,
                   }});
             } else {
                   return res.status(400).json({error: 'Data doesnt match'})
