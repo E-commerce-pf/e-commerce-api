@@ -15,10 +15,9 @@ routerUsers.get("/", (req, res) => {
 
 routerUsers.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const user = await User.findByPk(id, {
+  let user = await User.findByPk(id, {
     include: [{ model: Transaction }, { model: Favorite, include: Product }],
-  });
-
+  }).catch((e)=>console.log(e.message));
   if (user) {
     const cart = await Cart.findByPk(user.cartId, {
       include: [{ model: ProductInCart }],
