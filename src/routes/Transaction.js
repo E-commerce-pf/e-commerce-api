@@ -79,9 +79,13 @@ router.get("/", async (req, res) => {
   }
 
   if (state === "process") {
-    return res.json(
-      await Transaction.findAll({ where: { state }, include: User })
-    );
+    let result = await Transaction.findAll({ where: { state }, include: User })
+    .then(res => res.map(item =>{
+      if(item.dataValues.token) return item
+    }));
+
+    result = result.filter(item => item !== undefined);
+    return res.json(result)
   }
 
   return res.json(await Transaction.findAll({ include: [User] }));

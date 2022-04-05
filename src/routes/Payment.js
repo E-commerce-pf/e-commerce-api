@@ -94,7 +94,7 @@ paymentRouter.get("/capture/:transactionId", async (req, res) => {
         await updateAllStock(transactionId);
         await updateTransaction("complete", transactionId);
       })
-      .then(() => res.status(200).send({status:"Transaction completed"}))
+      .then(() => res.status(200).send({success : "Transaction completed"}))
       .catch((error) => res.status(400).send({ error: error.message }));
   } catch (error) {
     return res.status(400).send({ error: error.message });
@@ -103,8 +103,12 @@ paymentRouter.get("/capture/:transactionId", async (req, res) => {
 
 paymentRouter.get("/cancel/:transactionId", async (req, res) => {
   const { transactionId } = req.params;
-  await updateTransaction("canceled", transactionId);
-  res.send(cancelTemplate("Payment not made"));
+  try {
+    await updateTransaction("canceled", transactionId);
+    return res.status(200).json({success: 'Order canceled successfully'})
+  } catch (error) {
+    return res.status(error.status).json({error: error.message})
+  }
 });
 
 module.exports = paymentRouter;
