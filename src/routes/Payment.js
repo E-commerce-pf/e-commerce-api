@@ -28,7 +28,7 @@ paymentRouter.post("/create", async (req, res) => {
     }
     const { id } = transactionDetail.data.transaction;
     const { totalPrice } = transactionDetail.data.transaction.cart;
-
+    console.log('test')
     if(totalPrice === 0 ) return res.status(400).json({error : "No puede ser 0" })
 
     console.log(totalPrice)
