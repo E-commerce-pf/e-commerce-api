@@ -9,8 +9,8 @@ const { resetUserCart } = require("../controllers/cart");
 const { updateAllStock } = require("../controllers/product");
 const cancelTemplate = require("../utils/templateCancelPayment");
 
-const baseUrl = "https://everyones-store-api.herokuapp.com";
-//const baseUrl = "http://localhost:3001";
+// const baseUrl = "https://everyones-store-api.herokuapp.com";
+const baseUrl = "http://localhost:3001";
 
 paymentRouter.post("/create", async (req, res) => {
   const { description, userId } = req.body;
@@ -22,7 +22,6 @@ paymentRouter.post("/create", async (req, res) => {
     const transactionDetail = await axios.post(
       `${baseUrl}/api/transaction/${userId}`
     );
-  
     if (transactionDetail.data.error) {
       return res.status(404).json({ error: transactionDetail.data.error });
     }
@@ -58,7 +57,6 @@ paymentRouter.post("/create", async (req, res) => {
         },
       })
       .then((resp) => res.json(resp.data))
-      .catch((e)=>console.log(PAYPAL_API_CLIENT))
   } catch ({message}) {
     return res.status(500).json({ error: message });
   }
@@ -72,7 +70,7 @@ paymentRouter.get("/saveToken/:transactionId/:userId",async (req,res)=>{
     await resetUserCart(userId);
     return res.status(200).send(Capture("Payment in process"));
   } catch ({message}) {
-    console.log(message)
+    console.log('Estoy aqui')
     return res.status(500).json({ error: message });
   }
 })
@@ -96,7 +94,7 @@ paymentRouter.get("/capture/:transactionId", async (req, res) => {
         await updateAllStock(transactionId);
         await updateTransaction("complete", transactionId);
       })
-      .then(() => res.status(200).send({status:"Transaction completed"}))
+      .then(() => res.status(200).send({success : "Transaction completed"}))
       .catch((error) => res.status(400).send({ error: error.message }));
   } catch (error) {
     return res.status(400).send({ error: error.message });
@@ -105,8 +103,12 @@ paymentRouter.get("/capture/:transactionId", async (req, res) => {
 
 paymentRouter.get("/cancel/:transactionId", async (req, res) => {
   const { transactionId } = req.params;
-  await updateTransaction("canceled", transactionId);
-  res.send(cancelTemplate("Payment not made"));
+  try {
+    await updateTransaction("canceled", transactionId);
+    return res.status(200).json({success: 'Order canceled successfully'})
+  } catch (error) {
+    return res.status(error.status).json({error: error.message})
+  }
 });
 
 module.exports = paymentRouter;
