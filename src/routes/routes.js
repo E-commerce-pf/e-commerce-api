@@ -15,6 +15,7 @@ const routerReviews = require("./Reviews");
 const routerTransaction = require("./Transaction");
 const paymentRouter = require("./Payment");
 const sendEmailRouter = require("./SendEmail");
+const newletterRoute = require("./Newletter");
 
 //DEFINIMOS LOS CASOS DE USO DE LAS RUTAS
 router.use("/user", user);
@@ -30,5 +31,6 @@ router.use("/users", routerUsers);
 router.use("/transaction", routerTransaction);
 router.use("/payment", paymentRouter);
 router.use("/sendemail", sendEmailRouter);
+router.use("/newletter", newletterRoute);
 
 module.exports = router;
