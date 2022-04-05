@@ -42,7 +42,16 @@ routerUsers.put("/:id", async (req, res) => {
   const user = await User.findByPk(id);
   if (user) {
     await user.update({ ...req.body });
-    res.json(user);
+    res.json({
+      userId : user.id,
+      name : user.name,
+      lastName : user.lastName,
+      email : user.email,
+      phone: user.phone,
+      country: user.country,
+      city: user.city,
+      address: user.address,
+    });
   } else {
     res.status(404).json({ error: "No existe el usuario" });
   }
