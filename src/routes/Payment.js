@@ -57,6 +57,7 @@ paymentRouter.post("/create", async (req, res) => {
         },
       })
       .then((resp) => res.json(resp.data))
+      console.log(totalPrice);
   } catch ({message}) {
     return res.status(500).json({ error: message });
   }
@@ -102,12 +103,14 @@ paymentRouter.get("/capture/:transactionId", async (req, res) => {
 });
 
 paymentRouter.get("/cancel/:transactionId", async (req, res) => {
+  const { location } = req.query;
   const { transactionId } = req.params;
   try {
     await updateTransaction("canceled", transactionId);
-    return res.status(200).json({success: 'Order canceled successfully'})
+    if(location) return res.status(200).json({success: 'Order canceled successfully'})
+    else return res.send(cancelTemplate("Order cancel") );
   } catch (error) {
-    return res.status(error.status).json({error: error.message})
+    return res.status(error.status).json( {error: error.message} )
   }
 });
 
