@@ -15,6 +15,7 @@ const cancelTemplate = require("../utils/templateCancelPayment");
 paymentRouter.post("/create", async (req, res) => {
   const { description, userId } = req.body;
   
+  
   if (!description && !userId) {
     return res.status(404).json({ error: "Faltan parametros en body!" });
   }
@@ -27,6 +28,9 @@ paymentRouter.post("/create", async (req, res) => {
     }
     const { id } = transactionDetail.data.transaction;
     const { totalPrice } = transactionDetail.data.transaction.cart;
+    console.log('test')
+    if(totalPrice === 0 ) return res.status(400).json({error : "No puede ser 0" })
+
     console.log(totalPrice)
     const order = {
       intent: "CAPTURE",
@@ -43,8 +47,7 @@ paymentRouter.post("/create", async (req, res) => {
         brand_name: "Everyones Store",
         landing_page: "LOGIN",
         user_action: "PAY_NOW",
-        //return_url: `${baseUrl}/api/payment/capture/${id}/${userId}`,
-        return_url: `${baseUrl}/api/payment/saveToken/${id}/${userId}`,
+        return_url: `${baseUrl}/api/payment/capture/${id}/${userId}`,
         cancel_url: `${baseUrl}/api/payment/cancel/${id}`,
       },
     };
@@ -63,26 +66,12 @@ paymentRouter.post("/create", async (req, res) => {
   }
 });
 
-paymentRouter.get("/saveToken/:transactionId/:userId",async (req,res)=>{
-  const { token } = req.query;
-  const { transactionId,userId} = req.params;
+paymentRouter.get("/capture/:transactionId/:userId", async (req, res) => {
   try {
-    await saveTokenBuy(token,transactionId);
-    await resetUserCart(userId);
-    return res.status(200).send(Capture("Payment in process"));
-  } catch ({message}) {
-    console.log('Estoy aqui')
-    return res.status(500).json({ error: message });
-  }
-})
+    const { transactionId, userId } = req.params;
+    const { token } = req.query;
 
-paymentRouter.get("/capture/:transactionId", async (req, res) => {
-  try {
-    const { transactionId } = req.params;
-    let {token}=await Transaction.findByPk(transactionId);
-    axios
-      .post(
-        `${PAYPAL_API}/v2/checkout/orders/${token}/capture`,
+    axios.post(`${PAYPAL_API}/v2/checkout/orders/${token}/capture`,
         {},
         {
           auth: {
@@ -92,11 +81,15 @@ paymentRouter.get("/capture/:transactionId", async (req, res) => {
         }
       )
       .then(async (resp) => {
-        await updateAllStock(transactionId);
+        await resetUserCart(userId);
         await updateTransaction("complete", transactionId);
+        await updateAllStock(transactionId);
+        return res.send( Capture("Success") ) 
       })
-      .then(() => res.status(200).send({success : "Transaction completed"}))
-      .catch((error) => res.status(400).send({ error: error.message }));
+      .catch((error) => {
+        console.log(error)
+        res.status(400).send({ error: error.message })
+      });
   } catch (error) {
     return res.status(400).send({ error: error.message });
   }
