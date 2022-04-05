@@ -72,7 +72,7 @@ paymentRouter.get("/saveToken/:transactionId/:userId",async (req,res)=>{
     await resetUserCart(userId);
     return res.status(200).send(Capture("Payment in process"));
   } catch ({message}) {
-    console.log(message)
+    console.log('Estoy aqui')
     return res.status(500).json({ error: message });
   }
 })
