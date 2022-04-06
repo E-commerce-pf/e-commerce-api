@@ -70,7 +70,7 @@ router.put('/product/update/:id', verifyAdminToken, async (req, res)=>{
         if(!product) throw new Error('No product matches given ID')
 
         //const success = await Promise.all(Object.entries(validEntries).map(async ([key, value])=>await Product.update({[key]:value}, {where:{id}})))
-
+        image=image?.join(i=>"*_*");
         const success = await Product.update(
             {
                 title:title??product.title,
