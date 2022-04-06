@@ -13,25 +13,23 @@ const cancelTemplate = require("../utils/templateCancelPayment");
 //const baseUrl = "http://localhost:3001";
 
 paymentRouter.post("/create", async (req, res) => {
-  const { description, userId } = req.body;
+  const { description, userId,country,city,address } = req.body;
   
   
   if (!description && !userId) {
     return res.status(404).json({ error: "Faltan parametros en body!" });
   }
   try {
-    const transactionDetail = await axios.post(
-      `${baseUrl}/api/transaction/${userId}`
+    const transactionDetail = await axios.post(`${baseUrl}/api/transaction/${userId}`,{
+      country,city,address
+    }
     );
     if (transactionDetail.data.error) {
       return res.status(404).json({ error: transactionDetail.data.error });
     }
     const { id } = transactionDetail.data.transaction;
     const { totalPrice } = transactionDetail.data.transaction.cart;
-    console.log('test')
     if(totalPrice === 0 ) return res.status(400).json({error : "No puede ser 0" })
-
-    console.log(totalPrice)
     const order = {
       intent: "CAPTURE",
       purchase_units: [
@@ -60,7 +58,6 @@ paymentRouter.post("/create", async (req, res) => {
         },
       })
       .then((resp) => res.json(resp.data))
-      console.log(totalPrice);
   } catch ({message}) {
     return res.status(500).json({ error: message });
   }
