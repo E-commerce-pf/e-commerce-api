@@ -25,7 +25,7 @@ const sendEmail = (req, res) => {
     {
       from: EMAIL,
       to: email,
-      subject: `Hola ${name}`,
+      subject: `Support EveryOnes Store`,
       html: template,
     },
     (err, info) => {
