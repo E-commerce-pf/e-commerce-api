@@ -25,6 +25,11 @@ function Capture(success) {
           a {
             text-decoration: none;
           }
+          img {
+            display:block;
+            margin:auto;
+            height: 300px;
+          }
           button {
             padding: 10px;
             margin: 8px;
@@ -44,8 +49,10 @@ function Capture(success) {
         <div>
           <h1>${success}</h1>
           <button>
-            <a href="https://everyones-store-api.herokuapp.com?success=true/">Volver a Everyones Store</a>
+            <a href="https://everyones-store-q70uyrzx0-e-commerce-pf.vercel.app?success=true">Go back to Everyones Store</a>
           </button>
+          <p>Order completed. Thanks for trusting us.</p>
+          <img src="https://media.istockphoto.com/vectors/check-mark-correct-icon-blue-checkmark-in-circle-for-checklist-ok-vector-id1179132259?k=20&m=1179132259&s=170667a&w=0&h=GbSXDqfwstk0hG443XE3ImVAYwmmIIxNPSczelhyKz0=" alt="Checkout"/>
       </body>
     </html>
     `;
