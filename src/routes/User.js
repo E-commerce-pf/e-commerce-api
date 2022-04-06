@@ -105,7 +105,6 @@ router.get('/find/:userId', async (req, res)=>{
             statusCode = 400
             if(!/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/.test(userId)) throw new Error("Invalid ID format")
             const user = await User.findByPk(userId)
-
             statusCode = 404
             if(!user) throw new Error("No user found with given ID")
             else return res.status(200).json(user)

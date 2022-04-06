@@ -1,10 +1,11 @@
 const sequelize = require('../db');
 const { Transaction, User } = sequelize.models;
-const createTransaction= async (state,cart)=>
+const createTransaction= async (state,cart,country,city,address)=>
 {    
         return await Transaction.create({
             cart,
             state,
+            country,city,address,
         });
 }
 const updateTransaction= async (state,transactionId)=>
