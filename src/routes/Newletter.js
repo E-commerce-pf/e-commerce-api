@@ -8,6 +8,14 @@ newletterRoute.get("/", async (req, res) => {
 
 newletterRoute.post("/", async (req, res) => {
   const { email } = req.body;
+
+  const findEmail = await Newletter.findOne({ where: { email } });
+  if (findEmail) {
+    return res.status(400).json({
+      error: "Email already exists",
+    });
+  }
+
   const newletter = await Newletter.create({ email });
   res.json(newletter);
 });
