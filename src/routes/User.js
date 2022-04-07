@@ -31,6 +31,8 @@ router.post('/login', async(req,res) => {
                   return createUser(res, req.body);
             }
             return res.status(400).json({error: 'User not found'})
+      } else if(loginWithSocial){
+            result.dataValues.email === email
       }
 
       result = result.dataValues;
@@ -57,11 +59,12 @@ router.post('/login', async(req,res) => {
                         name : result.name,
                         lastName : result.lastName,
                         email : result.email,
-                        accessToken,
                         phone: result.phone,
                         country: result.country,
                         city: result.city,
                         address: result.address,
+                        loginWithSocial : result.loginWithSocial,
+                        accessToken
                   }});
             } else {
                   return res.status(400).json({error: 'Data doesnt match'})
