@@ -44,10 +44,9 @@ routerUsers.put("/:id", async (req, res) => {
 
   const { password } = req.body;
 
-  const newPassword = encrypt(password);
-
   if (user) {
     if (password) {
+      const newPassword = encrypt(password);
       await user.update({
         password: newPassword,
       });
