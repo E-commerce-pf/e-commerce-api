@@ -49,7 +49,7 @@ function Capture(success) {
         <div>
           <h1>${success}</h1>
           <button>
-            <a href="https://everyones-store-q70uyrzx0-e-commerce-pf.vercel.app?success=true">Go back to Everyones Store</a>
+            <a href="https://respaldo-everyones-store.vercel.app/?success=true">Go back to Everyones Store</a>
           </button>
           <p>Order completed. Thanks for trusting us.</p>
           <img src="https://media.istockphoto.com/vectors/check-mark-correct-icon-blue-checkmark-in-circle-for-checklist-ok-vector-id1179132259?k=20&m=1179132259&s=170667a&w=0&h=GbSXDqfwstk0hG443XE3ImVAYwmmIIxNPSczelhyKz0=" alt="Checkout"/>

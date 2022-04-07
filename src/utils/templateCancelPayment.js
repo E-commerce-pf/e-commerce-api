@@ -49,7 +49,7 @@ function cancelTemplate(success) {
           <div>
             <h1>${success}</h1>
             <button>
-              <a href="https://everyones-store-q70uyrzx0-e-commerce-pf.vercel.app">Go back to Everyones Store</a>
+              <a href="https://respaldo-everyones-store.vercel.app/">Go back to Everyones Store</a>
             </button>
             <p>Order canceled successfully.</p>
             <img src="https://img2.freepng.es/20180403/ihq/kisspng-check-mark-cross-red-tick-cross-5ac40470d1a056.1012398315227956328586.jpg" alt="canceled"/>
