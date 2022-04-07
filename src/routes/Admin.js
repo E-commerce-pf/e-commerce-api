@@ -237,7 +237,8 @@ router.post('/categories/create', verifyAdminToken, async (req, res)=>{
 
     const result = await Category.findOne({
         where:{
-            name
+            name,
+            disable : false
         }
     });
 
