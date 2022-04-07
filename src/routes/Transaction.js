@@ -11,6 +11,7 @@ const { isUUID } = require("../controllers/isUUID");
 router.post("/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
+    const {country,city,address}=req.body;
     let user = await User.findByPk(userId);
     let cart = await getCart(user.cartId);
     let err = { status: false };
@@ -34,7 +35,7 @@ router.post("/:userId", async (req, res) => {
         error: `Quantity must not be greater than the stock of the product: ${err.productId}`,
       });
     cart = { id: cart.id, totalPrice: cart.totalPrice, productsInCart };
-    let transaction = await createTransaction("process", cart);
+    let transaction = await createTransaction("process", cart,country,city,address);
     await user.addTransaction(transaction);
     transaction = await Transaction.findByPk(transaction.id);
     return res.status(200).send({ status: "Transaction created", transaction });

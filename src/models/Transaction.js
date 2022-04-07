@@ -7,7 +7,15 @@ module.exports = (sequelize) => {
                   defaultValue: DataTypes.UUIDV4,
                   primaryKey: true,
             },
-            token: {
+            country: {
+                  type: DataTypes.TEXT,
+                  allowNull: true,
+            },
+            city: {
+                  type: DataTypes.TEXT,
+                  allowNull: true,
+            },
+            address: {
                   type: DataTypes.TEXT,
                   allowNull: true,
             },
