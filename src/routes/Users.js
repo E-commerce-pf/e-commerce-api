@@ -2,6 +2,7 @@ const sequelize = require("../db");
 const { User, Cart, ProductInCart, Transaction, Favorite, Product } =
   sequelize.models;
 const routerUsers = require("express").Router();
+const { encrypt } = require("../controllers/encrypt");
 
 routerUsers.get("/", (req, res) => {
   User.findAll()
@@ -17,7 +18,7 @@ routerUsers.get("/:id", async (req, res) => {
   const { id } = req.params;
   let user = await User.findByPk(id, {
     include: [{ model: Transaction }, { model: Favorite, include: Product }],
-  }).catch((e)=>console.log(e.message));
+  }).catch((e) => console.log(e.message));
   if (user) {
     const cart = await Cart.findByPk(user.cartId, {
       include: [{ model: ProductInCart }],
@@ -40,13 +41,26 @@ routerUsers.get("/:id", async (req, res) => {
 routerUsers.put("/:id", async (req, res) => {
   const { id } = req.params;
   const user = await User.findByPk(id);
+
+  const { password } = req.body;
+
+  const newPassword = encrypt(password);
+
   if (user) {
-    await user.update({ ...req.body });
+    if (password) {
+      await user.update({
+        password: newPassword,
+      });
+    } else {
+      await user.update({
+        ...req.body,
+      });
+    }
     res.json({
-      userId : user.id,
-      name : user.name,
-      lastName : user.lastName,
-      email : user.email,
+      userId: user.id,
+      name: user.name,
+      lastName: user.lastName,
+      email: user.email,
       phone: user.phone,
       country: user.country,
       city: user.city,
