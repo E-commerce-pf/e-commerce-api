@@ -7,6 +7,9 @@ routerReviews.get("/products/score", (req, res) => {
 
   Product.findAll({
     include: Review,
+    where: {
+      disable : false
+    }
   })
     .then((data) => {
       return JSON.stringify(data);

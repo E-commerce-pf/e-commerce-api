@@ -19,7 +19,12 @@ router.get("/:id", async (req, res) => {
   if (!id) return res.status(400).json({ error: "Id not provided" });
   try {
     let result = await Category.findOne({
-      include: Product,
+      include: {
+        model : Product,
+        where : {
+          disable : false
+        }
+      },
       where: {
         id,
       },
