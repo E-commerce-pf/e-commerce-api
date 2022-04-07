@@ -50,6 +50,7 @@ routerUsers.put("/:id", async (req, res) => {
     if (password) {
       await user.update({
         password: newPassword,
+        loginWithSocial: false,
       });
     } else {
       await user.update({
