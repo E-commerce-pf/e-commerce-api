@@ -4,7 +4,8 @@ const { Product, Category, Review,Transaction } = sequelize.models;
 const updateStockProduct = async ( product,quantity )=>{
   Product.update(
     {
-      stock: product.stock-quantity
+      stock: product.stock-quantity,
+      sales: product.sales+quantity
     },
     {
       where: {
